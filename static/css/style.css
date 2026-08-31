@@ -3266,6 +3266,7 @@ body {
     line-height: 1.35 !important;
     display: -webkit-box !important;
     -webkit-line-clamp: 2 !important;
+    line-clamp: 2 !important;
     -webkit-box-orient: vertical !important;
     overflow: hidden !important;
     color: rgba(255, 255, 255, 0.65) !important;
