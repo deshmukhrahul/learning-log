@@ -1264,6 +1264,7 @@ body {
   display: inline;
 }
 
+.search-btn-kbd,
 .search-btn-key {
   display: inline-flex;
   align-items: center;
@@ -3186,21 +3187,35 @@ body {
 
   /* Mobile Search: Clean High-Precision SVG Icon */
   .search-btn-label,
+  .search-btn-kbd,
   .search-btn-key {
     display: none !important;
   }
   .search-btn-icon {
     display: inline-flex !important;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-pure);
+    align-items: center !important;
+    justify-content: center !important;
+    color: #ffffff !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+  .search-btn-icon svg {
+    width: 15px !important;
+    height: 15px !important;
+    display: block !important;
   }
   .topbar-search-btn {
-    width: 28px !important;
-    height: 28px !important;
+    width: 30px !important;
+    height: 30px !important;
+    min-width: 30px !important;
     padding: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
     justify-content: center !important;
     flex-shrink: 0 !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    border-radius: 4px !important;
   }
 
   /* Roadmap Pipeline & Slide Deck Mobile Styles */
@@ -3302,12 +3317,14 @@ body {
   }
 
   .topbar-search-btn {
-    width: 26px !important;
-    height: 26px !important;
+    width: 28px !important;
+    height: 28px !important;
+    min-width: 28px !important;
     padding: 0 !important;
     justify-content: center !important;
     flex-shrink: 0 !important;
     display: inline-flex !important;
+    align-items: center !important;
   }
 
   .minimal-row {
