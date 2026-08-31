@@ -30,7 +30,7 @@ jobs:
           sudo mv zola /usr/local/bin/
 
       - name: Build Zola Site
-        run: zola build
+        run: zola build -u https://deshmukhrahul.github.io/learning-log
 
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v3
