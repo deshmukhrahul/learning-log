@@ -1,28 +1,22 @@
 # Personal Learning — Systems Engineering Curriculum & Daily Workbench
 
-A high-performance systems engineering curriculum and daily lab workbench built with **Zola (Rust SSG)**, semantic HTML5, CSS3 design tokens, and vanilla JavaScript.
+A high-performance systems engineering curriculum and daily lab workbench built with Zola (Rust SSG), semantic HTML5, CSS3 design tokens, and vanilla JavaScript.
 
-![License](https://img.shields.io/badge/License-MIT-blue.svg)
-![SSG](https://img.shields.io/badge/Engine-Zola-orange.svg)
-![Dependencies](https://img.shields.io/badge/Dependencies-Zero-brightgreen.svg)
-![PWA](https://img.shields.io/badge/PWA-Ready-success.svg)
-![Designed with AI](https://img.shields.io/badge/Designed_with-AI%20%28Antigravity%20by%20Google%20DeepMind%29-8A2BE2.svg)
-
-> **🤖 Designed & Architected with AI**: This entire systems engineering platform—including the 4-box mission control telemetry layout, interactive HUD system simulators, zero-dependency search engine, and PWA offline architecture—was designed and built with **AI (Antigravity by Google DeepMind)**.
+Designed and architected collaboratively with AI (Antigravity by Google DeepMind).
 
 ---
 
 ## Key Features
 
-* **⚡ Sub-70ms Compilation:** Powered by Zola (Rust static site generator) with 0KB framework bloat.
-* **🖥️ 4-Box Telemetry Workbench:** Live Home Cockpit and Monthly Syllabus tracking banked study hours, sprint momentum, and active lab objectives.
-* **📱 Progressive Web App (PWA) & Offline Reading:** Installable standalone app with Service Worker pre-caching for air-gapped or offline learning.
-* **⌨️ Global Keyboard Navigation & Help HUD:** Full terminal-style hotkey navigation (<kbd>H</kbd>, <kbd>R</kbd>, <kbd>S</kbd>, <kbd>L</kbd>, <kbd>?</kbd>, <kbd>/</kbd>).
-* **🔍 Spotlight Instant Search:** Zero-dependency fuzzy search across all curriculum topics and labs (<kbd>/</kbd> or <kbd>Ctrl + K</kbd>).
-* **📈 Interactive Systems Simulators:** Markdown DSL blocks rendered as interactive hardware state machines (network sockets, eBPF pipelines, Raft consensus).
-* **📋 Persistent Interactive Checklists:** Daily deliverables save checkmark states to `localStorage`.
-* **💾 Study Log Backup & Sync:** 1-Click JSON export and import on the Verified History Ledger.
-* **📦 Zero Dependencies:** No Node.js, no npm build steps, pure native web standards.
+* **Sub-70ms Compilation:** Powered by Zola (Rust static site generator) with 0KB framework bloat.
+* **4-Box Telemetry Workbench:** Live Home Cockpit and Monthly Syllabus tracking banked study hours, sprint momentum, and active lab objectives.
+* **Progressive Web App (PWA) & Offline Reading:** Installable standalone app with Service Worker pre-caching for air-gapped or offline learning.
+* **Global Keyboard Navigation & Help HUD:** Full terminal-style hotkey navigation (H, R, S, L, ?, /).
+* **Spotlight Instant Search:** Zero-dependency fuzzy search across all curriculum topics and labs (/ or Ctrl + K).
+* **Interactive Systems Simulators:** Markdown DSL blocks rendered as interactive hardware state machines (network sockets, eBPF pipelines, Raft consensus).
+* **Persistent Interactive Checklists:** Daily deliverables save checkmark states to localStorage.
+* **Study Log Backup & Sync:** 1-Click JSON export and import on the Verified History Ledger.
+* **Zero Dependencies:** No Node.js, no npm build steps, pure native web standards.
 
 ---
 
@@ -55,7 +49,7 @@ A high-performance systems engineering curriculum and daily lab workbench built 
 ### Option B: Using Podman / Docker
 ```bash
 # Clone the repository
-git clone https://github.com/<username>/learning-log.git
+git clone https://github.com/deshmukhrahul/learning-log.git
 cd learning-log
 
 # Build static site to public/
@@ -98,7 +92,7 @@ cargo install --locked zola
 
 ## Adding New Curriculum Content
 
-Simply create a Markdown file in `content/<year>/<month>/day-XX-<topic>.md`:
+Create a Markdown file in `content/<year>/<month>/day-XX-<topic>.md`:
 
 ```toml
 +++

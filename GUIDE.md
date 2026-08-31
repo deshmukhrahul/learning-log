@@ -2,7 +2,7 @@
 
 A high-performance, zero-dependency systems engineering curriculum and daily lab workbench built with **Zola (Rust SSG)**, semantic HTML5, CSS3 design tokens, and vanilla ES6 JavaScript.
 
-> **🤖 Built & Designed with AI**: Architected and designed collaboratively using **Antigravity by Google DeepMind**.
+> **Built & Designed with AI**: Architected and designed collaboratively using **Antigravity by Google DeepMind**.
 
 ---
 
