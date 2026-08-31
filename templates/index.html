@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% set active_sec = get_section(path=config.extra.active_section_path) %}
+{% set all_labs = active_sec.pages %}
+{% set total_labs = all_labs | length %}
+{% set total_days = active_sec.extra.total_days | default(value=total_labs) %}
+{% set active_lab = all_labs | first %}
+
+<script id="sprintLabsData" type="application/json">
+[
+  {% for lab in all_labs %}
+  {
+    "day": {{ lab.extra.day | default(value=loop.index) | json_encode | safe }},
+    "title": {{ lab.title | json_encode | safe }},
+    "desc": {{ lab.description | default(value="") | json_encode | safe }},
+    "hours": {{ lab.extra.hours_spent | default(value=2.5) }},
+    "url": {{ lab.permalink | json_encode | safe }},
+    "path": {{ lab.path | json_encode | safe }}
+  }{% if not loop.last %},{% endif %}
+  {% endfor %}
+]
+</script>
+
+<div class="dashboard-widescreen-stage" id="workbenchStage" data-total-days="{{ total_days }}">
+
+  <!-- ── 1. BOX 1 (LEFT): PROGRAM SCOPE ─────────────────────────────────── -->
+  <aside class="workbench-panel panel-brand" id="boxBrand">
+    <div class="panel-inner">
+      <div class="panel-header">
+        <a href="{{ get_url(path='/roadmap/') }}" class="panel-header-link" id="curric-link">
+          <span class="panel-badge">ROADMAP</span>
+          <span class="nav-forward-arrow">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </a>
+      </div>
+      
+      <div class="panel-body">
+        <!-- Unit 1: Track -->
+        <div class="stat-unit">
+          <span class="u-label">TRACK</span>
+          <span class="u-val" id="curric-track">{{ config.extra.track | default(value="LINUX SYSTEMS ENGINEERING") }}</span>
+        </div>
+
+        <!-- Unit 2: Active Month -->
+        <div class="stat-unit">
+          <span class="u-label">ACTIVE MONTH</span>
+          <span class="u-val" id="curric-span">{{ active_sec.extra.month | default(value="AUGUST") }} {{ active_sec.extra.year | default(value="2026") }}</span>
+        </div>
+
+        <!-- Unit 3: Roadmap Progress -->
+        <div class="stat-unit">
+          <div class="u-split-header">
+            <span class="u-label">ROADMAP PROGRESS</span>
+            <span class="u-pct" id="curric-pct">0.0%</span>
+          </div>
+          <div class="curric-progress-track">
+            <div class="curric-progress-fill" id="curric-bar" style="width: 0%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-footer"></div>
+    </div>
+  </aside>
+
+  <!-- ── 2. BOX 2 (CENTER): TODAY'S LAB ───────────────────────────────── -->
+  <main class="workbench-panel panel-center-stage" id="boxMain">
+    <div class="ppt-slide-inner">
+      <div class="ppt-slide-header">
+        <span class="ppt-badge" id="sprint-badge">TODAY'S LAB</span>
+        <span class="ppt-slide-num" id="sprint-phase">EST. {{ active_lab.extra.hours_spent | default(value="2.5") }} HOURS</span>
+      </div>
+
+      <div class="ppt-slide-body">
+        <div class="mission-intro">
+          <h1 class="ppt-slide-title" id="sprint-title">{{ active_lab.title }}</h1>
+          <p class="ppt-slide-desc" id="sprint-desc">{{ active_lab.description }}</p>
+        </div>
+
+        <!-- Direct Month Progress Tracker -->
+        <div class="mission-progress-block">
+          <div class="u-split-header">
+            <span class="u-label">MONTH PROGRESS</span>
+            <span class="u-pct" id="sprint-pct-text">0 OF {% if total_days < 10 %}0{% endif %}{{ total_days }} LABS COMPLETED (0.0%)</span>
+          </div>
+          <div class="curric-progress-track">
+            <div class="curric-progress-fill" id="sprint-bar" style="width: 0%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ppt-slide-footer">
+        <a href="{{ active_lab.permalink }}" class="ppt-cta-btn" id="sprint-btn-link">
+          <span id="sprint-btn-text">START LAB {{ active_lab.extra.day | default(value="01") }}</span>
+        </a>
+        <span class="ppt-tag" id="sprint-status">STATUS: NOT STARTED</span>
+      </div>
+    </div>
+  </main>
+
+  <!-- ── 3. BOX 3 (RIGHT-1): THIS MONTH ─────────────────────────────────── -->
+  <aside class="workbench-panel panel-roadmap" id="boxRoadmap">
+    <div class="panel-inner">
+      <div class="panel-header">
+        <a href="{{ active_sec.permalink }}" class="panel-header-link" id="view-sprint-link">
+          <span class="panel-badge">SYLLABUS</span>
+          <span class="nav-forward-arrow">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </a>
+      </div>
+      
+      <div class="panel-body">
+        <!-- Unit 1: Topic -->
+        <div class="stat-unit">
+          <span class="u-label">MONTH TOPIC</span>
+          <span class="u-val" id="month-topic">{{ active_sec.extra.topic | default(value=active_sec.title) }}</span>
+        </div>
+
+        <!-- Unit 2: Target -->
+        <div class="stat-unit">
+          <span class="u-label">PROJECT GOAL</span>
+          <span class="u-val" id="month-target">{{ active_sec.extra.target | default(value="PRODUCTION ARTIFACT") }}</span>
+        </div>
+
+        <!-- Unit 3: Labs completed this month -->
+        <div class="stat-unit">
+          <span class="u-label">COMPLETED LABS</span>
+          <span class="u-val text-dim" id="month-labs-done">0 / {{ total_days }}</span>
+        </div>
+      </div>
+
+      <div class="panel-footer"></div>
+    </div>
+  </aside>
+
+  <!-- ── 4. BOX 4 (RIGHT-2): RUNTIME TOTALS ──────────────────────────────── -->
+  <aside class="workbench-panel panel-tracker" id="boxTracker">
+    <div class="panel-inner">
+      <div class="panel-header">
+        <a href="{{ get_url(path='/history/') }}" class="panel-header-link" id="view-history-link">
+          <span class="panel-badge">HISTORY</span>
+          <span class="nav-forward-arrow">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </a>
+      </div>
+
+      <div class="panel-body">
+        <!-- Metric 1: Total Lifetime Hours -->
+        <div class="stat-unit">
+          <span class="u-label">TOTAL TIME</span>
+          <span class="u-val text-dim" id="cockpitTotalHours">0.0 HOURS</span>
+        </div>
+
+        <!-- Metric 2: All Labs Completed -->
+        <div class="stat-unit">
+          <span class="u-label">ALL LABS FINISHED</span>
+          <span class="u-val text-dim" id="cockpitTotalLabs">0 LABS</span>
+        </div>
+
+        <!-- Metric 3: Months Completed -->
+        <div class="stat-unit">
+          <span class="u-label">MONTHS COMPLETED</span>
+          <span class="u-val text-dim" id="cockpitTotalMonths">0 / 24 MONTHS</span>
+        </div>
+      </div>
+
+      <div class="panel-footer"></div>
+    </div>
+  </aside>
+
+</div>
+{% endblock %}

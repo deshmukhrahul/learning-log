@@ -1,0 +1,271 @@
+{% extends "base.html" %}
+
+{% block title %}Roadmap · {{ config.title }}{% endblock %}
+
+{% block breadcrumb %}
+<div class="topbar-breadcrumb">
+  <span class="topbar-breadcrumb-sep">/</span>
+  <span class="topbar-breadcrumb-curr">ROADMAP</span>
+</div>
+{% endblock %}
+
+{% block content %}
+{% set active_sec = get_section(path=config.extra.active_section_path) %}
+{% set root = get_section(path="_index.md") %}
+{% set y2026_sec = get_section(path="2026/_index.md") %}
+{% set y2027_sec = get_section(path="2027/_index.md") %}
+
+<div class="dashboard-widescreen-stage">
+
+  <!-- ── BOX 1 (LEFT): PROGRAM SCOPE ────────────────────────────────────── -->
+  <aside class="workbench-panel panel-brand">
+    <div class="panel-inner">
+      <div class="panel-header">
+        <a href="{{ get_url(path='/') }}" class="panel-header-link">
+          <span class="nav-back-arrow">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 13L5 8L10 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <span class="panel-badge">HOME</span>
+        </a>
+      </div>
+
+      <div class="panel-body">
+        <!-- Unit 1: Goal -->
+        <div class="stat-unit">
+          <span class="u-label">TRACK</span>
+          <span class="u-val">{{ config.extra.track | default(value="LINUX SYSTEMS ENGINEERING") }}</span>
+        </div>
+
+        <!-- Unit 2: Focus -->
+        <div class="stat-unit">
+          <span class="u-label">FOCUS</span>
+          <span class="u-val">{{ config.extra.focus | default(value="KERNEL, NETWORKING & GO") }}</span>
+        </div>
+
+        <!-- Unit 3: Pace -->
+        <div class="stat-unit">
+          <span class="u-label">PACE</span>
+          <span class="u-val">SELF-PACED · CONTINUOUS</span>
+        </div>
+      </div>
+
+      <div class="panel-footer"></div>
+    </div>
+  </aside>
+
+  <!-- ── BOX 2 (CENTER): UPCOMING 3 MONTHS ──────────────────────────────── -->
+  <main class="workbench-panel panel-center-stage" id="boxMain">
+    <div class="ppt-slide-inner">
+      <div class="ppt-slide-header">
+        <span class="ppt-badge">UPCOMING MONTHS</span>
+        <span class="ppt-slide-num">3-MONTH VIEW · 2026</span>
+      </div>
+
+      <div class="ppt-slide-body">
+        <div class="minimal-rows-list">
+          {% for sub_path in y2026_sec.subsections %}
+            {% if loop.index <= 3 %}
+              {% set sub_s = get_section(path=sub_path) %}
+              {% set is_active = sub_path == config.extra.active_section_path %}
+              {% set is_done = sub_s.extra.badge == 'DONE' %}
+              <a href="{{ sub_s.permalink }}" class="minimal-row {% if is_active %}minimal-row-active{% elif is_done %}minimal-row-done{% else %}minimal-row-queued{% endif %}" title="{{ sub_s.title | split(pat='— ') | last }} — {{ sub_s.extra.topic }}">
+                <div class="mr-left">
+                  <span class="mr-day">{{ sub_s.extra.month | default(value='SPRINT') | upper | truncate(length=3, end='') }} {{ sub_s.extra.year | default(value='2026') }}</span>
+                  <span class="mr-title" title="{{ sub_s.title | split(pat='— ') | last }}">{{ sub_s.title | split(pat="— ") | last }}</span>
+                </div>
+                <div class="mr-right">
+                  <span class="mr-topic" title="{{ sub_s.extra.topic }}">{{ sub_s.extra.topic }}</span>
+                  <span class="mr-status {% if is_active %}mr-status-active{% endif %}">
+                    {% if is_active %}ACTIVE{% elif is_done %}DONE{% else %}QUEUED{% endif %}
+                  </span>
+                </div>
+              </a>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="panel-footer">
+        <button class="ppt-cta-btn ppt-cta-ghost" onclick="openRoadmapModal()">
+          <span>FULL ROADMAP</span>
+        </button>
+        <span class="ppt-tag">1 OF 24 MONTHS ACTIVE</span>
+      </div>
+    </div>
+  </main>
+
+  <!-- ── BOX 3 (RIGHT-1): THIS MONTH ────────────────────────────────────── -->
+  <aside class="workbench-panel panel-roadmap">
+    <div class="panel-inner">
+      <div class="panel-header">
+        <a href="{{ active_sec.permalink }}" class="panel-header-link">
+          <span class="panel-badge">SYLLABUS</span>
+          <span class="nav-forward-arrow">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </a>
+      </div>
+
+      <div class="panel-body">
+        <!-- Unit 1: Current Module -->
+        <div class="stat-unit">
+          <span class="u-label">CURRENT MONTH</span>
+          <span class="u-val">{{ active_sec.extra.month | default(value="AUGUST") }} {{ active_sec.extra.year | default(value="2026") }}</span>
+        </div>
+
+        <!-- Unit 2: Topic -->
+        <div class="stat-unit">
+          <span class="u-label">MONTH TOPIC</span>
+          <span class="u-val">{{ active_sec.extra.topic }}</span>
+        </div>
+
+        <!-- Unit 3: Target -->
+        <div class="stat-unit">
+          <span class="u-label">PROJECT GOAL</span>
+          <span class="u-val">{{ active_sec.extra.target | default(value="PRODUCTION ARTIFACT") }}</span>
+        </div>
+      </div>
+
+      <div class="panel-footer"></div>
+    </div>
+  </aside>
+
+  <!-- ── BOX 4 (RIGHT-2): RUNTIME TOTALS ────────────────────────────────── -->
+  <aside class="workbench-panel panel-tracker">
+    <div class="panel-inner">
+      <div class="panel-header">
+        <a href="{{ get_url(path='/history/') }}" class="panel-header-link">
+          <span class="panel-badge">HISTORY</span>
+          <span class="nav-forward-arrow">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </a>
+      </div>
+
+      <div class="panel-body">
+        <!-- Unit 1: Modules Completed -->
+        <div class="stat-unit">
+          <span class="u-label">COMPLETED MONTHS</span>
+          <span class="u-val text-dim" id="rmModulesDone">0 / 24</span>
+        </div>
+
+        <!-- Unit 2: Hours Invested -->
+        <div class="stat-unit">
+          <span class="u-label">HOURS LOGGED</span>
+          <span class="u-val text-dim" id="rmTotalHours">0.0 HOURS</span>
+        </div>
+
+        <!-- Unit 3: Completed Labs -->
+        <div class="stat-unit">
+          <span class="u-label">COMPLETED LABS</span>
+          <span class="u-val text-dim" id="rmTotalSessions">0 LABS</span>
+        </div>
+      </div>
+
+      <div class="panel-footer"></div>
+    </div>
+  </aside>
+
+</div>
+
+<!-- ── FULL 24-MONTH ROADMAP MODAL WITH YEAR DROPDOWN ──────────────────── -->
+<div id="roadmapModal" class="cyber-modal-backdrop" onclick="if(event.target===this)closeRoadmapModal()">
+  <div class="cyber-modal-box">
+    <div class="cyber-modal-header">
+      <div class="cm-header-left">
+        <span class="panel-badge">CAREER ROADMAP</span>
+        <select class="cm-year-select" id="modalYearSelect" onchange="switchModalYear(this.value)">
+          <option value="2026" selected>2026 (ACTIVE)</option>
+          <option value="2027">2027</option>
+        </select>
+      </div>
+      <button class="cyber-modal-close" onclick="closeRoadmapModal()" title="Close (ESC)">✕ CLOSE</button>
+    </div>
+    <div class="cyber-modal-body">
+      <!-- Year 2026 Content (Active Default) -->
+      <div class="cm-year-section" id="modalYear2026">
+        <div class="minimal-rows-list">
+          {% for sub_path in y2026_sec.subsections %}
+            {% set sub_s = get_section(path=sub_path) %}
+            {% set is_active = sub_path == config.extra.active_section_path %}
+            {% set is_done = sub_s.extra.badge == 'DONE' %}
+            <a href="{{ sub_s.permalink }}" class="minimal-row {% if is_active %}minimal-row-active{% elif is_done %}minimal-row-done{% else %}minimal-row-queued{% endif %}" title="{{ sub_s.title | split(pat='— ') | last }} — {{ sub_s.extra.topic }}">
+              <div class="mr-left">
+                <span class="mr-day">{{ sub_s.extra.month | default(value='SPRINT') | upper | truncate(length=3, end='') }} {{ sub_s.extra.year | default(value='2026') }}</span>
+                <span class="mr-title" title="{{ sub_s.title | split(pat='— ') | last }}">{{ sub_s.title | split(pat="— ") | last }}</span>
+              </div>
+              <div class="mr-right">
+                <span class="mr-topic" title="{{ sub_s.extra.topic }}">{{ sub_s.extra.topic }}</span>
+                <span class="mr-status {% if is_active %}mr-status-active{% endif %}">
+                  {% if is_active %}ACTIVE{% elif is_done %}DONE{% else %}QUEUED{% endif %}
+                </span>
+              </div>
+            </a>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Year 2027 Content -->
+      <div class="cm-year-section" id="modalYear2027" style="display: none;">
+        <div class="minimal-rows-list">
+          {% for sub_path in y2027_sec.subsections %}
+            {% set sub_s = get_section(path=sub_path) %}
+            {% set is_active = sub_path == config.extra.active_section_path %}
+            {% set is_done = sub_s.extra.badge == 'DONE' %}
+            <a href="{{ sub_s.permalink }}" class="minimal-row {% if is_active %}minimal-row-active{% elif is_done %}minimal-row-done{% else %}minimal-row-queued{% endif %}" title="{{ sub_s.title | split(pat='— ') | last }} — {{ sub_s.extra.topic }}">
+              <div class="mr-left">
+                <span class="mr-day">{{ sub_s.extra.month | default(value='SPRINT') | upper | truncate(length=3, end='') }} {{ sub_s.extra.year | default(value='2027') }}</span>
+                <span class="mr-title" title="{{ sub_s.title | split(pat='— ') | last }}">{{ sub_s.title | split(pat="— ") | last }}</span>
+              </div>
+              <div class="mr-right">
+                <span class="mr-topic" title="{{ sub_s.extra.topic }}">{{ sub_s.extra.topic }}</span>
+                <span class="mr-status {% if is_active %}mr-status-active{% endif %}">
+                  {% if is_active %}ACTIVE{% elif is_done %}DONE{% else %}QUEUED{% endif %}
+                </span>
+              </div>
+            </a>
+          {% endfor %}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+function openRoadmapModal() {
+  const modal = document.getElementById('roadmapModal');
+  if (modal) modal.classList.add('cyber-modal-open');
+}
+
+function closeRoadmapModal() {
+  const modal = document.getElementById('roadmapModal');
+  if (modal) modal.classList.remove('cyber-modal-open');
+}
+
+function switchModalYear(year) {
+  const sec2026 = document.getElementById('modalYear2026');
+  const sec2027 = document.getElementById('modalYear2027');
+  const select = document.getElementById('modalYearSelect');
+  if (select) select.value = year;
+
+  if (year === '2026') {
+    if (sec2026) sec2026.style.display = 'block';
+    if (sec2027) sec2027.style.display = 'none';
+  } else {
+    if (sec2027) sec2027.style.display = 'block';
+    if (sec2026) sec2026.style.display = 'none';
+  }
+}
+
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeRoadmapModal();
+});
+</script>
+{% endblock %}

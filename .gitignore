@@ -1,0 +1,17 @@
+# Build output
+public/
+
+# Temporary and log files
+*.log
+.system_generated/
+*.swp
+*.swo
+*~
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+
+# IDE configurations
+.vscode/
+.idea/

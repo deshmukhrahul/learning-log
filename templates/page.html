@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page.title }} · {{ config.title }}{% endblock %}
+
+{% block breadcrumb %}
+<div class="topbar-breadcrumb">
+  <span class="topbar-breadcrumb-sep">/</span>
+  {% if page.ancestors | length > 1 %}
+    {% set section_path = page.ancestors | reverse | first %}
+    {% set current_section = get_section(path=section_path) %}
+    <a href="{{ current_section.permalink }}" class="topbar-breadcrumb-link">{{ current_section.extra.month | default(value=current_section.title) | safe }}</a>
+    <span class="topbar-breadcrumb-sep">/</span>
+  {% endif %}
+  <span class="topbar-breadcrumb-curr">{% if page.extra.day %}LAB {{ page.extra.day }}{% else %}{{ page.title | safe }}{% endif %}</span>
+</div>
+{% endblock %}
+
+{% block topbar_right %}
+  {% if page.ancestors | length > 1 %}
+    {% set section_path = page.ancestors | reverse | first %}
+    {% set current_section = get_section(path=section_path) %}
+    {% if current_section.extra.month %}
+      <a href="{{ current_section.permalink }}" class="topbar-action-link" title="Back to Syllabus">
+        <span class="btn-text-full">BACK TO SYLLABUS</span>
+        <span class="btn-icon-mobile">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 13L5 8L10 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </a>
+    {% else %}
+      <a href="{{ get_url(path='/') }}" class="topbar-action-link" title="Back to Home">
+        <span class="btn-text-full">HOME</span>
+        <span class="btn-icon-mobile">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 13L5 8L10 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </a>
+    {% endif %}
+  {% else %}
+    <a href="{{ get_url(path='/') }}" class="topbar-action-link" title="Back to Home">
+      <span class="btn-text-full">HOME</span>
+      <span class="btn-icon-mobile">
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10 13L5 8L10 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </span>
+    </a>
+  {% endif %}
+  <button class="topbar-search-btn" id="btnOpenSearch" onclick="openSearchModal()" title="Search Curriculum (Press / or Ctrl+K)">
+    <span class="search-btn-label">SEARCH</span>
+    <span class="search-btn-key">/</span>
+    <span class="search-btn-icon">
+      <svg width="13" height="13" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M7.33333 12.6667C10.2789 12.6667 12.6667 10.2789 12.6667 7.33333C12.6667 4.38781 10.2789 2 7.33333 2C4.38781 2 2 4.38781 2 7.33333C2 10.2789 4.38781 12.6667 7.33333 12.6667Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M14 14L11.1 11.1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </span>
+  </button>
+{% endblock topbar_right %}
+
+{% block content %}
+<article class="lab-stage">
+  
+  <!-- CLEAN LAB HEADER -->
+  <header class="lab-header">
+    {% if page.extra.hours_spent %}
+    <div class="lab-eyebrow">
+      <span>EST. {{ page.extra.hours_spent }} HOURS</span>
+    </div>
+    {% endif %}
+    <div class="lab-title-wrap">
+      <h1 class="lab-title">{{ page.title | split(pat=": ") | last }}</h1>
+      <div class="lab-header-line"></div>
+    </div>
+    {% if page.description %}
+    <p class="lab-lead">{{ page.description }}</p>
+    {% endif %}
+  </header>
+
+  <!-- LAB PROSE CONTENT -->
+  <div class="lab-body">
+    {{ page.content | safe }}
+  </div>
+
+  <!-- INTERACTIVE LAB COMPLETION TRIGGER -->
+  {% if page.extra.hours_spent or page.extra.day %}
+  <div class="lab-complete-section">
+    <div class="complete-card">
+      <div class="complete-meta">
+        <span class="complete-eyebrow">LAB COMPLETION GATE</span>
+        <h3 class="complete-title">Finished Today's Coding Session?</h3>
+        <p class="complete-desc">Marking this lab complete banks +{{ page.extra.hours_spent | default(value="2.5") }} hours to your progress log and advances your sprint momentum.</p>
+      </div>
+      <button class="btn-mark-complete" id="btnMarkComplete"
+        data-day="{{ page.extra.day | default(value=1) }}"
+        data-hours="{{ page.extra.hours_spent | default(value='2.5') }}"
+        data-title="{{ page.title }}"
+        data-url="{{ current_path | default(value=page.permalink) }}">
+        <span class="btn-complete-text">MARK LAB COMPLETE</span>
+      </button>
+    </div>
+  </div>
+  {% endif %}
+
+</article>
+{% endblock %}
+
+{% block footer_nav %}
+  <div class="footer-topic-pair">
+    <!-- PREVIOUS LAB (AUTO-DISCOVERED VIA page.lower) -->
+    {% if page.lower %}
+      <a href="{{ page.lower.permalink }}" class="footer-arrow-line-link">
+        <span class="footer-arrow-line-text">{{ page.lower.title }}</span>
+        <div class="arrow-line-track left-arrow">
+          <div class="arrow-line-head-left"></div>
+          <div class="arrow-line-shaft"></div>
+        </div>
+      </a>
+    {% else %}
+      <a href="{{ get_url(path='/') }}" class="footer-arrow-line-link">
+        <span class="footer-arrow-line-text">Dashboard Overview</span>
+        <div class="arrow-line-track left-arrow">
+          <div class="arrow-line-head-left"></div>
+          <div class="arrow-line-shaft"></div>
+        </div>
+      </a>
+    {% endif %}
+
+    <!-- NEXT LAB (AUTO-DISCOVERED VIA page.higher) -->
+    {% if page.higher %}
+      <a href="{{ page.higher.permalink }}" class="footer-arrow-line-link">
+        <span class="footer-arrow-line-text">{{ page.higher.title }}</span>
+        <div class="arrow-line-track right-arrow">
+          <div class="arrow-line-shaft"></div>
+          <div class="arrow-line-head"></div>
+        </div>
+      </a>
+    {% endif %}
+  </div>
+{% endblock %}

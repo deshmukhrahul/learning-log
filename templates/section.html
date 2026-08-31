@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+
+{% block title %}{{ section.title }} · {{ config.title }}{% endblock %}
+
+{% block breadcrumb %}
+<div class="topbar-breadcrumb">
+  <span class="topbar-breadcrumb-sep">/</span>
+  <span class="topbar-breadcrumb-curr">SYLLABUS</span>
+</div>
+{% endblock %}
+
+{% block content %}
+{% set all_labs = section.pages %}
+{% set total_labs = all_labs | length %}
+{% set total_days = section.extra.total_days | default(value=total_labs) %}
+{% set active_lab = all_labs | first %}
+
+{% set_global total_hours = 0.0 %}
+{% for page in all_labs %}
+  {% set h = page.extra.hours_spent | default(value=2.5) | float %}
+  {% set_global total_hours = total_hours + h %}
+{% endfor %}
+
+<script id="sprintLabsData" type="application/json">
+[
+  {% for lab in all_labs %}
+  {
+    "day": {{ lab.extra.day | default(value=loop.index) | json_encode | safe }},
+    "title": {{ lab.title | json_encode | safe }},
+    "desc": {{ lab.description | default(value="") | json_encode | safe }},
+    "hours": {{ lab.extra.hours_spent | default(value=2.5) }},
+    "url": {{ lab.permalink | json_encode | safe }},
+    "path": {{ lab.path | json_encode | safe }}
+  }{% if not loop.last %},{% endif %}
+  {% endfor %}
+]
+</script>
+
+<div class="dashboard-widescreen-stage" id="syllabusStage" data-total-days="{{ total_days }}">
+
+  <!-- ── BOX 1 (LEFT): SPRINT SCOPE ─────────────────────────────────────── -->
+  <aside class="workbench-panel panel-brand" id="boxBrand">
+    <div class="panel-inner">
+      <div class="panel-header">
+        <a href="{{ get_url(path='/roadmap/') }}" class="panel-header-link" id="curric-link">
+          <span class="panel-badge">ROADMAP</span>
+          <span class="nav-forward-arrow">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </a>
+      </div>
+      
+      <div class="panel-body">
+        <!-- Unit 1: Topic -->
+        <div class="stat-unit">
+          <span class="u-label">MODULE</span>
+          <span class="u-val">{{ section.extra.topic | default(value=section.title) }}</span>
+        </div>
+
+        <!-- Unit 2: Target -->
+        <div class="stat-unit">
+          <span class="u-label">PROJECT TARGET</span>
+          <span class="u-val">{{ section.extra.target | default(value="PRODUCTION ARTIFACT") }}</span>
+        </div>
+
+        <!-- Unit 3: Month Progress -->
+        <div class="stat-unit">
+          <div class="u-split-header">
+            <span class="u-label">SPRINT PROGRESS</span>
+            <span class="u-pct" id="sprint-progress-pill">0.0% COMPLETED</span>
+          </div>
+          <div class="curric-progress-track">
+            <div class="curric-progress-fill" id="curric-bar" style="width: 0%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-footer"></div>
+    </div>
+  </aside>
+
+  <!-- ── BOX 2 (CENTER): DAILY LABS LIST ────────────────────────────────── -->
+  <main class="workbench-panel panel-center-stage" id="boxMain">
+    <div class="ppt-slide-inner">
+      <div class="ppt-slide-header">
+        <span class="ppt-badge">DAILY LABS</span>
+        <span class="ppt-slide-num">{{ total_labs }} LABS AVAILABLE</span>
+      </div>
+
+      <div class="ppt-slide-body">
+        <div class="minimal-rows-list" id="syllabusLabsGrid">
+          {% for lab in all_labs %}
+            {% set lab_num = lab.extra.day | default(value=loop.index) %}
+            {% set is_active = loop.first %}
+            <a href="{{ lab.permalink }}" class="minimal-row {% if is_active %}minimal-row-active{% else %}minimal-row-queued{% endif %}" data-day-index="{{ loop.index }}">
+              <div class="mr-left">
+                <span class="mr-day">LAB {{ lab_num }}</span>
+                <span class="mr-title">{{ lab.title }}</span>
+              </div>
+              <div class="mr-right">
+                <span class="mr-hours">{{ lab.extra.hours_spent | default(value="2.5") }}h</span>
+                <span class="mr-status">{% if is_active %}START{% else %}OPEN{% endif %}</span>
+              </div>
+            </a>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="ppt-slide-footer">
+        {% if active_lab %}
+        <a href="{{ active_lab.permalink }}" class="ppt-cta-btn" id="sprint-btn-link">
+          <span id="sprint-btn-text">START LAB {{ active_lab.extra.day | default(value="01") }}</span>
+        </a>
+        {% endif %}
+        <span class="ppt-tag" id="sprint-status">STATUS: NOT STARTED</span>
+      </div>
+    </div>
+  </main>
+
+  <!-- ── BOX 3 (RIGHT-1): NEXT LAB PREVIEW ──────────────────────────────── -->
+  <aside class="workbench-panel panel-roadmap">
+    <div class="panel-inner">
+      <div class="panel-header">
+        {% if active_lab %}
+        <a href="{{ active_lab.permalink }}" class="panel-header-link" id="syl-btn-link">
+          <span class="panel-badge">OPEN LAB</span>
+          <span class="nav-forward-arrow">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </a>
+        {% else %}
+        <span class="panel-badge">NEXT LAB</span>
+        {% endif %}
+      </div>
+
+      <div class="panel-body">
+        {% if active_lab %}
+        <!-- Unit 1: Current Lab -->
+        <div class="stat-unit">
+          <span class="u-label">CURRENT LAB</span>
+          <span class="u-val" id="syl-preview-title">{{ active_lab.title | split(pat=": ") | last }}</span>
+        </div>
+
+        <!-- Unit 2: Duration -->
+        <div class="stat-unit">
+          <span class="u-label">LAB DURATION</span>
+          <span class="u-val" id="syl-preview-duration">{{ active_lab.extra.hours_spent | default(value="2.5") }} HOURS</span>
+        </div>
+
+        <!-- Unit 3: Objective -->
+        <div class="stat-unit">
+          <span class="u-label">OBJECTIVE</span>
+          <span class="u-val" id="syl-preview-desc">{{ active_lab.description | default(value="Build and verify a production-ready lab artifact.") }}</span>
+        </div>
+        {% else %}
+        <div class="stat-unit">
+          <span class="u-label">STATUS</span>
+          <span class="u-val text-dim">NO LABS ADDED YET</span>
+        </div>
+        {% endif %}
+      </div>
+
+      <div class="panel-footer"></div>
+    </div>
+  </aside>
+
+  <!-- ── BOX 4 (RIGHT-2): RUNTIME TOTALS ────────────────────────────────── -->
+  <aside class="workbench-panel panel-tracker">
+    <div class="panel-inner">
+      <div class="panel-header">
+        <a href="{{ get_url(path='/history/') }}" class="panel-header-link">
+          <span class="panel-badge">HISTORY</span>
+          <span class="nav-forward-arrow">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </a>
+      </div>
+
+      <div class="panel-body">
+        <!-- Unit 1: Time Banked -->
+        <div class="stat-unit">
+          <span class="u-label">HOURS LOGGED</span>
+          <span class="u-val text-dim" id="cockpitTotalHours">0.0 HOURS</span>
+        </div>
+
+        <!-- Unit 2: Project Status -->
+        <div class="stat-unit">
+          <span class="u-label">PROJECT GOAL</span>
+          <span class="u-val text-dim" id="gateway-status">NOT STARTED</span>
+        </div>
+
+        <!-- Unit 3: Labs Remaining -->
+        <div class="stat-unit">
+          <span class="u-label">LABS REMAINING</span>
+          <span class="u-val text-dim" id="sylLabsLeft">{{ total_days }} LABS</span>
+        </div>
+      </div>
+
+      <div class="panel-footer"></div>
+    </div>
+  </aside>
+
+</div>
+{% endblock %}

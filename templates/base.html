@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#06090e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="{{ get_url(path='manifest.json') }}">
+  <link rel="apple-touch-icon" href="{{ get_url(path='icons/icon-192.svg') }}">
+  <title>{% block title %}{{ config.title }}{% endblock %}</title>
+  <link rel="stylesheet" href="{{ get_url(path='css/style.css') }}?v=20260831f">
+  <script src="{{ get_url(path='js/app.js') }}?v=20260831f" defer></script>
+</head>
+<body>
+<div id="readingProgressBar" class="reading-progress-bar"></div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+
+    <!-- LEFT BRAND ZONE & LOCATION BREADCRUMB -->
+    <div class="brand-zone">
+      <div class="brand-title-wrap">
+        <a class="header-brand-link" href="{{ get_url(path='/') }}">{{ config.title }}</a>
+        <div class="laser-beam-wrapper">
+          <div class="laser-beam"></div>
+        </div>
+      </div>
+      {% block breadcrumb %}{% endblock %}
+    </div>
+
+    <!-- RIGHT SEARCH TRIGGER -->
+    <div class="topbar-right">
+      {% block topbar_right %}
+      <button class="topbar-search-btn" id="btnOpenSearch" onclick="openSearchModal()" title="Search Curriculum (Press / or Ctrl+K)">
+        <span class="search-btn-label">SEARCH</span>
+        <span class="search-btn-kbd">/</span>
+        <span class="search-btn-icon">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M7 12C9.76142 12 12 9.76142 12 7C12 4.23858 9.76142 2 7 2C4.23858 2 2 4.23858 2 7C2 9.76142 4.23858 12 7 12Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M14 14L10.5 10.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </button>
+      {% endblock %}
+    </div>
+
+  </div>
+</header>
+
+<main class="page-content">
+  {% block content %}{% endblock %}
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    {% block footer_nav %}{% endblock %}
+  </div>
+</footer>
+
+<!-- ── CURRICULUM SEARCH INDEX ─────────────────────────────────────────── -->
+<script id="searchIndexData" type="text/plain">
+Curriculum Roadmap|{{ get_url(path="/roadmap/") }}|ALL|ROADMAP|Overview of all learning modules, sprints, and upcoming topics.|ROADMAP
+Lab History|{{ get_url(path="/history/") }}|ALL|HISTORY|Log of completed daily labs and logged study hours.|HISTORY
+{% set root = get_section(path="_index.md") %}
+{% for sec_path in root.subsections | sort %}
+  {% set y_sec = get_section(path=sec_path) %}
+  {% for sub_path in y_sec.subsections %}
+    {% set sub_s = get_section(path=sub_path) %}
+{{ sub_s.title | split(pat="— ") | last | safe }}|{{ sub_s.permalink }}|{{ sub_s.extra.year | default(value="2026") | safe }}|{{ sub_s.extra.topic | default(value="MODULE") | safe }}|{{ sub_s.description | default(value=sub_s.extra.target | default(value="Learning Module")) | safe }}|{{ sub_s.extra.month | default(value="SPRINT") | safe }}
+    {% for p in sub_s.pages %}
+{{ p.title | safe }}|{{ p.permalink }}|{{ sub_s.extra.year | default(value="2026") | safe }}|{{ sub_s.extra.topic | default(value="LAB") | safe }}|{{ p.description | default(value="Daily lab session") | safe }}|DAY {{ p.extra.day | default(value=loop.index) | safe }}
+    {% endfor %}
+  {% endfor %}
+{% endfor %}
+</script>
+
+<!-- ── HIGH-PERFORMANCE SPOTLIGHT SEARCH MODAL ────────────────────────── -->
+<div id="searchModal" class="cyber-modal-backdrop" onclick="if(event.target===this)closeSearchModal()">
+  <div class="cyber-modal-box search-modal-box">
+    <div class="search-modal-header">
+      <div class="search-input-wrap">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search systems architecture, labs, kernel, eBPF, Raft..." autocomplete="off" spellcheck="false">
+      </div>
+      <button class="cyber-modal-close" onclick="closeSearchModal()" title="Close (ESC)">✕ ESC</button>
+    </div>
+    <div class="search-modal-results" id="searchResults">
+      <div class="search-empty-prompt">
+        <span class="search-prompt-text">TYPE TO SEARCH MODULES & DAILY LABS</span>
+        <span class="search-prompt-sub">Instant keyboard navigation across all curriculum topics</span>
+      </div>
+    </div>
+    <div class="search-modal-footer">
+      <div class="search-hints">
+        <span class="search-hint-item"><kbd class="search-kbd">↑</kbd><kbd class="search-kbd">↓</kbd> NAVIGATE</span>
+        <span class="search-hint-item"><kbd class="search-kbd">ENTER</kbd> OPEN</span>
+        <span class="search-hint-item"><kbd class="search-kbd">ESC</kbd> CLOSE</span>
+        <span class="search-hint-item"><kbd class="search-kbd">?</kbd> SHORTCUTS</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── KEYBOARD SHORTCUTS HUD MODAL ────────────────────────────────────── -->
+<div id="shortcutsModal" class="cyber-modal-backdrop" onclick="if(event.target===this)closeShortcutsModal()">
+  <div class="cyber-modal-box shortcuts-modal-box">
+    <div class="cyber-modal-header">
+      <span class="panel-badge">KEYBOARD SHORTCUTS HUD</span>
+      <button class="cyber-modal-close" onclick="closeShortcutsModal()" title="Close (ESC)">✕ ESC</button>
+    </div>
+    <div class="shortcuts-modal-body">
+      <div class="shortcut-row"><span class="shortcut-key"><kbd class="search-kbd">/</kbd> or <kbd class="search-kbd">Ctrl+K</kbd></span><span class="shortcut-desc">Open Spotlight Search</span></div>
+      <div class="shortcut-row"><span class="shortcut-key"><kbd class="search-kbd">H</kbd></span><span class="shortcut-desc">Navigate to Home Cockpit</span></div>
+      <div class="shortcut-row"><span class="shortcut-key"><kbd class="search-kbd">R</kbd></span><span class="shortcut-desc">Navigate to Master Roadmap</span></div>
+      <div class="shortcut-row"><span class="shortcut-key"><kbd class="search-kbd">S</kbd></span><span class="shortcut-desc">Navigate to Sprint Syllabus</span></div>
+      <div class="shortcut-row"><span class="shortcut-key"><kbd class="search-kbd">L</kbd></span><span class="shortcut-desc">Navigate to Verified History Ledger</span></div>
+      <div class="shortcut-row"><span class="shortcut-key"><kbd class="search-kbd">?</kbd></span><span class="shortcut-desc">Open Keyboard Shortcuts HUD</span></div>
+      <div class="shortcut-row"><span class="shortcut-key"><kbd class="search-kbd">ESC</kbd></span><span class="shortcut-desc">Dismiss Active Modal</span></div>
+    </div>
+    <div class="search-modal-footer">
+      <span class="search-hint-item">PRESS <kbd class="search-kbd">ESC</kbd> OR ANY KEY TO DISMISS</span>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

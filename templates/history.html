@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+
+{% block title %}Lab History · {{ config.title }}{% endblock %}
+
+{% block breadcrumb %}
+<div class="topbar-breadcrumb">
+  <span class="topbar-breadcrumb-sep">/</span>
+  <span class="topbar-breadcrumb-curr">LAB HISTORY</span>
+</div>
+{% endblock %}
+
+{% block content %}
+{% set active_sec = get_section(path=config.extra.active_section_path) %}
+{% set all_labs = active_sec.pages %}
+{% set total_labs = all_labs | length %}
+{% set total_days = active_sec.extra.total_days | default(value=total_labs) %}
+
+<div class="dashboard-widescreen-stage" data-total-days="{{ total_days }}">
+
+  <!-- ── BOX 1 (LEFT): RUNTIME TOTALS ──────────────────────────────────── -->
+  <aside class="workbench-panel panel-brand">
+    <div class="panel-inner">
+      <div class="panel-header">
+        <a href="{{ get_url(path='/roadmap/') }}" class="panel-header-link">
+          <span class="nav-back-arrow">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 13L5 8L10 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <span class="panel-badge">ROADMAP</span>
+        </a>
+      </div>
+
+      <div class="panel-body">
+        <!-- Unit 1: Hours Banked -->
+        <div class="stat-unit">
+          <span class="u-label">HOURS LOGGED</span>
+          <span class="u-val text-dim" id="histTotalHours">—</span>
+        </div>
+
+        <!-- Unit 2: Sessions Verified -->
+        <div class="stat-unit">
+          <span class="u-label">COMPLETED LABS</span>
+          <span class="u-val text-dim" id="histTotalSessions">—</span>
+        </div>
+
+        <!-- Unit 3: Current Sprint -->
+        <div class="stat-unit">
+          <span class="u-label">CURRENT MONTH</span>
+          <span class="u-val">{{ active_sec.extra.month | default(value="AUG") }} {{ active_sec.extra.year | default(value="2026") }}</span>
+        </div>
+      </div>
+
+      <div class="panel-footer"></div>
+    </div>
+  </aside>
+
+  <!-- ── BOX 2 (CENTER): CHRONOLOGICAL LAB LEDGER ──────────────────────── -->
+  <main class="workbench-panel panel-center-stage" id="boxMain">
+    <div class="ppt-slide-inner">
+      <div class="ppt-slide-header">
+        <span class="ppt-badge">COMPLETED LABS LOG</span>
+        <div class="history-actions">
+          <button class="btn-history-action" id="btnExportHistory" onclick="exportStudyHistory()" title="Export your completed labs and hours as JSON backup">EXPORT JSON</button>
+          <label class="btn-history-action" title="Import completed labs from a JSON backup">
+            IMPORT JSON
+            <input type="file" id="importHistoryFile" accept=".json" onchange="importStudyHistory(event)" style="display: none;">
+          </label>
+        </div>
+      </div>
+
+      <div class="ppt-slide-body">
+        <div class="minimal-rows-list" id="historyLogList">
+          <div class="history-empty-state">
+            <span class="empty-state-label">NO COMPLETED LABS RECORDED</span>
+            <span class="empty-state-desc">Mark your daily labs complete to log hours and save your progress here.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ppt-slide-footer">
+        <span class="ppt-tag" id="histSprintProgress">0.0% MONTH PROGRESS</span>
+      </div>
+    </div>
+  </main>
+
+  <!-- ── BOX 3 (RIGHT-1): THIS MONTH ───────────────────────────────────── -->
+  <aside class="workbench-panel panel-roadmap">
+    <div class="panel-inner">
+      <div class="panel-header">
+        <a href="{{ active_sec.permalink }}" class="panel-header-link">
+          <span class="panel-badge">SYLLABUS</span>
+          <span class="nav-forward-arrow">
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </a>
+      </div>
+
+      <div class="panel-body">
+        <!-- Unit 1: Topic -->
+        <div class="stat-unit">
+          <span class="u-label">MONTH TOPIC</span>
+          <span class="u-val">{{ active_sec.extra.topic }}</span>
+        </div>
+
+        <!-- Unit 2: Target -->
+        <div class="stat-unit">
+          <span class="u-label">PROJECT GOAL</span>
+          <span class="u-val">{{ active_sec.extra.target | default(value="PRODUCTION ARTIFACT") }}</span>
+        </div>
+
+        <!-- Unit 3: Progress Bar -->
+        <div class="stat-unit">
+          <div class="u-split-header">
+            <span class="u-label">MONTH PROGRESS</span>
+            <span class="u-pct" id="histSprintPct">0.0%</span>
+          </div>
+          <div class="curric-progress-track">
+            <div class="curric-progress-fill" id="curric-bar" style="width: 0%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-footer"></div>
+    </div>
+  </aside>
+
+  <!-- ── BOX 4 (RIGHT-2): PROJECT STATUS ───────────────────────────────── -->
+  <aside class="workbench-panel panel-tracker">
+    <div class="panel-inner">
+      <div class="panel-header">
+        <span class="panel-badge">PROJECT STATUS</span>
+      </div>
+
+      <div class="panel-body">
+        <!-- Unit 1: Project Status -->
+        <div class="stat-unit">
+          <span class="u-label">STATUS</span>
+          <span class="u-val text-dim" id="histGateway">NOT STARTED</span>
+        </div>
+
+        <!-- Unit 2: Labs Required -->
+        <div class="stat-unit">
+          <span class="u-label">LABS REQUIRED</span>
+          <span class="u-val">{{ total_days }} LABS</span>
+        </div>
+
+        <!-- Unit 3: Next Month -->
+        <div class="stat-unit">
+          <span class="u-label">NEXT MONTH</span>
+          <span class="u-val text-dim">SEPTEMBER 2026</span>
+        </div>
+      </div>
+
+      <div class="panel-footer">
+        <span class="ppt-tag" id="histGatewayFooter">{{ total_days }} LABS REMAINING</span>
+      </div>
+    </div>
+  </aside>
+
+</div>
+{% endblock %}

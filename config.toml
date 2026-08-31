@@ -1,0 +1,15 @@
+base_url = "http://localhost:1111"
+title = "Personal Learning"
+description = "Personal systems engineering workbench, interactive simulators, and daily lab progress tracker."
+compile_sass = false
+build_search_index = false
+
+[extra]
+author = "Systems Engineer"
+track = "LINUX SYSTEMS ENGINEERING"
+focus = "KERNEL, NETWORKING & GO"
+
+# Active coordinates
+active_section_path = "2026/august/_index.md"
+start_year = 2026
+
