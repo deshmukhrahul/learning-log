@@ -9,8 +9,8 @@
   <link rel="manifest" href="{{ get_url(path='manifest.json') }}">
   <link rel="apple-touch-icon" href="{{ get_url(path='icons/icon-192.svg') }}">
   <title>{% block title %}{{ config.title }}{% endblock %}</title>
-  <link rel="stylesheet" href="{{ get_url(path='css/style.css') }}?v=20260831g">
-  <script src="{{ get_url(path='js/app.js') }}?v=20260831g" defer></script>
+  <link rel="stylesheet" href="{{ get_url(path='css/style.css') }}?v=20260831h">
+  <script src="{{ get_url(path='js/app.js') }}?v=20260831h" defer></script>
 </head>
 <body>
 <div id="readingProgressBar" class="reading-progress-bar"></div>
@@ -80,9 +80,16 @@ Lab History|{{ get_url(path="/history/") }}|ALL|HISTORY|Log of completed daily l
   <div class="cyber-modal-box search-modal-box">
     <div class="search-modal-header">
       <div class="search-input-wrap">
-        <input type="text" id="searchInput" class="search-input" placeholder="Search systems architecture, labs, kernel, eBPF, Raft..." autocomplete="off" spellcheck="false">
+        <svg class="search-input-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M7 12C9.76142 12 12 9.76142 12 7C12 4.23858 9.76142 2 7 2C4.23858 2 2 4.23858 2 7C2 9.76142 4.23858 12 7 12Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M14 14L10.5 10.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <input type="text" id="searchInput" class="search-input" placeholder="Search curriculum, labs, topics..." autocomplete="off" spellcheck="false">
       </div>
-      <button class="cyber-modal-close" onclick="closeSearchModal()" title="Close (ESC)">✕ ESC</button>
+      <button class="cyber-modal-close" onclick="closeSearchModal()" title="Close">
+        <span class="close-text-desktop">✕ ESC</span>
+        <span class="close-text-mobile">✕</span>
+      </button>
     </div>
     <div class="search-modal-results" id="searchResults">
       <div class="search-empty-prompt">
