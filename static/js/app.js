@@ -1296,6 +1296,10 @@ window.openSearchModal = function() {
 
 window.closeSearchModal = function() {
   const modal = document.getElementById('searchModal');
+  const input = document.getElementById('searchInput');
+  if (input) {
+    input.blur();
+  }
   if (modal) {
     modal.classList.remove('cyber-modal-open');
     document.body.classList.remove('modal-open');
