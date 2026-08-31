@@ -12,6 +12,9 @@ week = "4"
 hours_spent = 2.5
 +++
 
+> [!NOTE]
+> **SAMPLE LAB / DUMMY STARTER ENTRY**: This is an example daily lab entry. You can replace this content with your own daily research and study notes.
+
 ## 1. Objectives & Architectural Context
 
 In this lab session, we dive deep into **Kernel Buffers, TCP Streams & Streaming JSON**.

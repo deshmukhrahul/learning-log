@@ -12,6 +12,9 @@ week = "4"
 hours_spent = 2.5
 +++
 
+> [!NOTE]
+> **SAMPLE LAB / DUMMY STARTER ENTRY**: This is an example daily lab demonstrating the 4-part systems architecture structure, interactive hardware simulators, and completion tracking. You can edit this file to record your own custom daily study notes.
+
 ## 1. The Brief: Sockets as Kernel File Descriptors
 
 In Linux, **everything is a file descriptor (FD)**. When your Go program opens a TCP connection or listens on a port, the Linux kernel allocates an integer index in the process FD table pointing to a kernel `struct file` and `struct socket`.

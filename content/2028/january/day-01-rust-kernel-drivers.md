@@ -9,6 +9,9 @@ day = "01"
 duration = "2.5 Hours"
 +++
 
+> [!NOTE]
+> **SAMPLE LAB / DUMMY STARTER ENTRY**: This is an example daily lab entry demonstrating the future year (2028) curriculum structure.
+
 # 1. THE BRIEF: RUST FOR LINUX KERNEL DRIVERS
 
 The Linux kernel officially supports Rust as a first-class language for writing safe kernel drivers and subsystems. Rust prevents memory safety vulnerabilities such as use-after-free, double-free, and data races at compile time.

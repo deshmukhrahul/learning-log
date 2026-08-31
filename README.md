@@ -6,6 +6,9 @@ A high-performance systems engineering curriculum and daily lab workbench built 
 ![SSG](https://img.shields.io/badge/Engine-Zola-orange.svg)
 ![Dependencies](https://img.shields.io/badge/Dependencies-Zero-brightgreen.svg)
 ![PWA](https://img.shields.io/badge/PWA-Ready-success.svg)
+![Designed with AI](https://img.shields.io/badge/Designed_with-AI%20%28Antigravity%20by%20Google%20DeepMind%29-8A2BE2.svg)
+
+> **🤖 Designed & Architected with AI**: This entire systems engineering platform—including the 4-box mission control telemetry layout, interactive HUD system simulators, zero-dependency search engine, and PWA offline architecture—was designed and built with **AI (Antigravity by Google DeepMind)**.
 
 ---
 
