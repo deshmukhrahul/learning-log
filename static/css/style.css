@@ -1200,7 +1200,41 @@ body {
   gap: 0.25rem;
 }
 
-/* Year Dropdown Selector inside Modal Header */
+/* Year Tab Buttons inside Modal Header */
+.cm-year-tabs {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.cm-year-tab {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.25rem 0.65rem;
+  border-radius: 2px;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  line-height: 1;
+}
+
+.cm-year-tab:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #ffffff;
+}
+
+.cm-year-tab.active {
+  background: #ffffff !important;
+  color: #06090e !important;
+  border-color: #ffffff !important;
+}
+
+/* Year Dropdown Selector inside Modal Header (Fallback) */
 .cm-year-select {
   background: #06090e;
   border: 1px solid rgba(255, 255, 255, 0.2);
@@ -3171,12 +3205,13 @@ body {
     border-radius: 2px !important;
   }
 
-  /* Search Modal Mobile Overhaul */
+  /* Cyber Modal Mobile Overhaul (Full Roadmap & Search) */
   .cyber-modal-backdrop {
     align-items: flex-start !important;
     padding: 0.5rem 0.5rem 1.5rem !important;
   }
 
+  .cyber-modal-box,
   .search-modal-box {
     width: 100% !important;
     max-width: 100% !important;
@@ -3186,10 +3221,46 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.25) !important;
   }
 
+  .cyber-modal-header,
   .search-modal-header {
     padding: 0.75rem 0.85rem !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
     gap: 0.5rem !important;
     border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
+  }
+
+  .cm-header-left {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+    flex: 1 !important;
+    min-width: 0 !important;
+  }
+
+  .cm-badge {
+    font-size: 0.62rem !important;
+    padding: 0.15rem 0.4rem !important;
+    flex-shrink: 0 !important;
+  }
+
+  .cm-year-tabs {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.25rem !important;
+  }
+
+  .cm-year-tab {
+    font-size: 0.68rem !important;
+    padding: 0.2rem 0.45rem !important;
+    line-height: 1 !important;
+  }
+
+  .cyber-modal-body {
+    padding: 0.75rem !important;
+    gap: 0.75rem !important;
+    max-height: calc(85vh - 55px) !important;
   }
 
   .search-input-wrap {
@@ -3219,6 +3290,7 @@ body {
     align-items: center !important;
     justify-content: center !important;
     border-radius: 2px !important;
+    flex-shrink: 0 !important;
   }
 
   .search-modal-results {

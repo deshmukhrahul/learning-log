@@ -179,13 +179,16 @@
   <div class="cyber-modal-box">
     <div class="cyber-modal-header">
       <div class="cm-header-left">
-        <span class="panel-badge">CAREER ROADMAP</span>
-        <select class="cm-year-select" id="modalYearSelect" onchange="switchModalYear(this.value)">
-          <option value="2026" selected>2026 (ACTIVE)</option>
-          <option value="2027">2027</option>
-        </select>
+        <span class="panel-badge cm-badge">ROADMAP</span>
+        <div class="cm-year-tabs">
+          <button type="button" class="cm-year-tab active" id="tabYear2026" onclick="switchModalYear('2026')">2026</button>
+          <button type="button" class="cm-year-tab" id="tabYear2027" onclick="switchModalYear('2027')">2027</button>
+        </div>
       </div>
-      <button class="cyber-modal-close" onclick="closeRoadmapModal()" title="Close (ESC)">✕ CLOSE</button>
+      <button class="cyber-modal-close" onclick="closeRoadmapModal()" title="Close">
+        <span class="close-text-desktop">✕ CLOSE</span>
+        <span class="close-text-mobile">✕</span>
+      </button>
     </div>
     <div class="cyber-modal-body">
       <!-- Year 2026 Content (Active Default) -->
@@ -241,26 +244,36 @@
 <script>
 function openRoadmapModal() {
   const modal = document.getElementById('roadmapModal');
-  if (modal) modal.classList.add('cyber-modal-open');
+  if (modal) {
+    modal.classList.add('cyber-modal-open');
+    document.body.classList.add('modal-open');
+  }
 }
 
 function closeRoadmapModal() {
   const modal = document.getElementById('roadmapModal');
-  if (modal) modal.classList.remove('cyber-modal-open');
+  if (modal) {
+    modal.classList.remove('cyber-modal-open');
+    document.body.classList.remove('modal-open');
+  }
 }
 
 function switchModalYear(year) {
   const sec2026 = document.getElementById('modalYear2026');
   const sec2027 = document.getElementById('modalYear2027');
-  const select = document.getElementById('modalYearSelect');
-  if (select) select.value = year;
+  const tab2026 = document.getElementById('tabYear2026');
+  const tab2027 = document.getElementById('tabYear2027');
 
   if (year === '2026') {
     if (sec2026) sec2026.style.display = 'block';
     if (sec2027) sec2027.style.display = 'none';
+    if (tab2026) tab2026.classList.add('active');
+    if (tab2027) tab2027.classList.remove('active');
   } else {
     if (sec2027) sec2027.style.display = 'block';
     if (sec2026) sec2026.style.display = 'none';
+    if (tab2027) tab2027.classList.add('active');
+    if (tab2026) tab2026.classList.remove('active');
   }
 }
 
