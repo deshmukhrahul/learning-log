@@ -120,6 +120,19 @@ Zola and the template engine automatically index the new lab in search, syllabus
 
 ---
 
+## Advancing Monthly Sprints
+
+To advance your active learning focus to a new month or year, update `active_section_path` in `config.toml`:
+
+```toml
+[extra]
+active_section_path = "2026/september/_index.md"
+```
+
+The Home Cockpit, active syllabus, and roadmap automatically shift to the new sprint across the entire site.
+
+---
+
 ## Documentation
 For complete architectural details, simulator DSL syntax, state machine schemas, and deployment instructions, see [GUIDE.md](GUIDE.md).
 

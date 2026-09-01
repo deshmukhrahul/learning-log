@@ -147,7 +147,35 @@ Global keyboard event dispatcher in `app.js`:
 
 ---
 
-## 6. Interactive HUD System Simulator DSL
+## 6. Advancing Sprints via `config.toml` (Mission Control)
+
+The file `config.toml` serves as the central mission control needle for the entire platform.
+
+```toml
+[extra]
+active_section_path = "2026/august/_index.md"
+start_year = 2026
+```
+
+### How `active_section_path` Drives the Platform:
+* **Home Cockpit (`index.html`)**: Automatically queries and renders the active month's lab workbench (Box 2), syllabus topic & sprint stats (Box 3), and project deliverable goal (Box 4).
+* **Roadmap Modal (`roadmap.html`)**: Automatically assigns the green/white `ACTIVE` badge to the current sprint while marking earlier sprints `DONE` and future sprints `QUEUED`.
+* **Navigation Links**: Directs the `SYLLABUS >` forward arrow in the topbar and sidebar straight into your active monthly curriculum.
+
+### Advancing to the Next Month or Year:
+When a sprint is complete and you advance to the next month or year, update **that single line** in `config.toml`:
+```toml
+# Move to September 2026:
+active_section_path = "2026/september/_index.md"
+
+# Move to Year 2 (January 2027):
+active_section_path = "2027/january/_index.md"
+```
+Running `zola build` immediately shifts the cockpit, roadmap, and syllabus coordinates across the entire site without requiring any edits to HTML or JavaScript templates.
+
+---
+
+## 7. Interactive HUD System Simulator DSL
 
 The site features an inline system simulator that converts structured Markdown DSL blocks into interactive hardware animations.
 
@@ -175,7 +203,7 @@ The site features an inline system simulator that converts structured Markdown D
 
 ---
 
-## 7. How to Author a New Daily Lab
+## 8. How to Author a New Daily Lab
 
 1. **Create a Markdown File:**
    Create a `.md` file inside the target month directory (e.g. `content/2026/september/ebpf-tracing.md` or `content/2028/january/day-01-rust-kernel-drivers.md`).
@@ -205,7 +233,7 @@ The site features an inline system simulator that converts structured Markdown D
 
 ---
 
-## 8. Local Development & Deployment
+## 9. Local Development & Deployment
 
 ### Option 1: Standalone Binary (Recommended — Zero Toolchain Overhead)
 1. Download the latest pre-compiled archive for your OS from **[Zola Latest Releases](https://github.com/getzola/zola/releases/latest)**.
