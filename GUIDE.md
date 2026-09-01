@@ -203,25 +203,83 @@ The site features an inline system simulator that converts structured Markdown D
 
 ---
 
-## 8. How to Author a New Daily Lab
+## 8. Authoring Runbooks & Labs (The Template System)
 
 Ready-made starter templates are provided in the `_templates/` directory so you never have to write boilerplate or frontmatter from scratch:
 
-1. **Duplicate the SysAdmin Setup & Runbook Template:**
-   ```bash
-   mkdir -p content/2026/september
-   cp _templates/sysadmin-setup-template.md content/2026/september/day-01-wireguard-mesh.md
-   ```
+### 1. Available Starter Templates:
+* **[`_templates/sysadmin-setup-template.md`](file:///home/rdx/Documents/learning-log-github/_templates/sysadmin-setup-template.md)**: Production-grade 8-part infrastructure runbook for SysAdmins, DevOps, network engineers, and desktop setups.
+* **[`_templates/markdown-kitchen-sink.md`](file:///home/rdx/Documents/learning-log-github/_templates/markdown-kitchen-sink.md)**: Visual cheat-sheet and copy-paste reference for all supported Markdown formatting, tabs, callouts, tables, and SVGs.
 
-2. **Visual Markdown & Component Reference:**
-   * Refer to `_templates/markdown-kitchen-sink.md` for live examples of callout alerts, multi-OS tabs, tables, code blocks, and Excalidraw vector diagrams.
+### 2. How to Author a New Runbook:
+```bash
+# 1. Create target sprint directory (e.g. September 2026):
+mkdir -p content/2026/september
 
-3. **Standard Runbook Structure (Pre-formatted in Template):**
-   * **Section 1: The Brief** — Architecture fundamentals and memory pipeline.
-   * **Interactive Visualizer** — Optional `<div class="hud-simulator">` interactive hardware block.
-   * **Section 2: Hands-on Experiment** — Complete, runnable Go / C / Rust implementation with 1-click copy toolbar.
-   * **Section 3: Anomalies & Gotchas** — Production edge cases, socket leaks, kernel parameters.
-   * **Section 4: Daily Deliverables Checklist** — Task checklist (`- [ ] ...`) with automatic `localStorage` persistence.
+# 2. Duplicate the sysadmin runbook template:
+cp _templates/sysadmin-setup-template.md content/2026/september/day-01-wireguard-mesh.md
+```
+
+### 3. The 8-Part Production Runbook Structure:
+1. **Section 1: Objective & Target Architecture** — Mission statement, success criteria checkboxes, and visual topology diagram.
+2. **Section 2: Infrastructure Matrix & Prerequisites** — Host inventory table (IPs, OS, kernel, resources) and required modules.
+3. **Section 3: Step-by-Step Implementation Log** — Multi-OS interactive tabs (`Ubuntu`, `FreeBSD`, `RHEL`), secure crypto keygen (`umask 077`), and production config files.
+4. **Section 4: Security Hardening & Threat Mitigation** — Stateful firewall rules (`ufw` / `pf`), key permissions, killswitch mechanisms, and PSKs.
+5. **Section 5: Verification & Diagnostic Runbook (3 Levels)** — Daemon status (`systemctl`), live socket handshakes (`wg show`), and throughput benchmarks (`iperf3`).
+6. **Section 6: Production Gotchas & Troubleshooting Matrix** — Quick-reference diagnostic table (Symptom, Root Cause, Immediate Fix).
+7. **Section 7: Maintenance & Operations Commands** — Live logging (`journalctl`), zero-downtime reloads, and offline backups.
+8. **Section 8: Deliverables & Sign-Off Checklist** — Interactive completion checkboxes (`- [ ] ...`) with automatic `localStorage` persistence.
+
+---
+
+### 4. Markdown UI Components Guide:
+
+#### Multi-OS Interactive Tabs:
+```markdown
+<div class="hud-tabs">
+<div class="hud-tab" data-tab="Ubuntu / Debian">
+
+```bash
+sudo apt update && sudo apt install -y wireguard
+```
+
+</div>
+<div class="hud-tab" data-tab="FreeBSD">
+
+```bash
+sudo pkg install wireguard-tools
+```
+
+</div>
+</div>
+```
+
+#### GitHub-Style Callout Alert Boxes:
+```markdown
+> [!NOTE]
+> Informational context and background architecture details.
+
+> [!TIP]
+> Pro-tips and performance optimization recommendations.
+
+> [!IMPORTANT]
+> Mandatory prerequisites and required kernel parameters.
+
+> [!WARNING]
+> Potential traps, packet fragmentation, and MTU gotchas.
+
+> [!CAUTION]
+> High-risk commands (firewall lockouts, data loss, downtime).
+```
+
+#### Excalidraw Dark Mode SVG Topologies:
+1. Design your network or cluster topology on **[Excalidraw.com](https://excalidraw.com/)**.
+2. Export as **Dark Mode SVG**.
+3. Save the `.svg` file into `/static/images/` (e.g. `static/images/my-cluster.svg`).
+4. Embed directly in Markdown:
+```markdown
+![Cluster Architecture](/images/my-cluster.svg)
+```
 
 ---
 
