@@ -2037,18 +2037,20 @@ body {
 
 /* ── PROSE MARKDOWN HYPERLINKS ── */
 .lab-body a {
-  color: #38bdf8;
+  color: var(--text-pure);
   text-decoration: underline;
-  text-decoration-color: rgba(56, 189, 248, 0.4);
+  text-decoration-color: rgba(255, 255, 255, 0.4);
   text-underline-offset: 4px;
   font-weight: 600;
   transition: all 0.15s ease;
+  padding: 0 2px;
 }
 
 .lab-body a:hover {
   color: #ffffff;
-  text-decoration-color: #38bdf8;
-  text-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
+  text-decoration-color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
 }
 
 /* ── PROSE DATA TABLES & MATRICES ── */
@@ -5067,7 +5069,7 @@ body.modal-open {
   align-items: center;
   justify-content: center;
   margin: 0 0.5rem;
-  color: #38bdf8;
+  color: var(--text-pure);
   font-weight: 900;
   font-size: 0.95rem;
   line-height: 1;
