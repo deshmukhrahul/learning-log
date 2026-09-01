@@ -1,13 +1,11 @@
-const CACHE_NAME = 'systems-log-v7';
+const CACHE_NAME = 'systems-log-v8';
 const PRECACHE_ASSETS = [
-  '/',
-  '/css/style.css',
-  '/js/app.js',
-  '/manifest.json',
-  '/icons/icon-192.svg',
-  '/icons/icon-512.svg',
-  '/roadmap/',
-  '/history/'
+  './',
+  'css/style.css',
+  'js/app.js',
+  'manifest.json',
+  'icons/icon-192.svg',
+  'icons/icon-512.svg'
 ];
 
 // Install: Pre-cache shell assets

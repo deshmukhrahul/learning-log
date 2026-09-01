@@ -16,6 +16,12 @@ function normalizeUrl(url) {
   }
 }
 
+function getAppUrl(path) {
+  const base = (window.SITE_BASE_URL || '/').replace(/\/$/, '');
+  const cleanPath = (path || '').replace(/^\//, '');
+  return cleanPath ? `${base}/${cleanPath}` : `${base}/`;
+}
+
 function loadUserState() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -259,7 +265,7 @@ function renderCockpitProgress(userState) {
 
     const btnTextEl = document.getElementById('sprint-btn-text');
     if (btnTextEl) btnTextEl.textContent = `ADVANCE TO SEPTEMBER →`;
-    setAttr('sprint-btn-link', 'href', '/2026/september/');
+    setAttr('sprint-btn-link', 'href', getAppUrl('2026/september/'));
     setVal('sprint-status', 'STATUS: COMPLETED');
   }
 
@@ -1529,16 +1535,16 @@ function setupGlobalKeyboardShortcuts() {
     // Global navigation shortcuts
     if (key === 'h' || key === 'H') {
       e.preventDefault();
-      window.location.href = '/';
+      window.location.href = getAppUrl('');
     } else if (key === 'r' || key === 'R') {
       e.preventDefault();
-      window.location.href = '/roadmap/';
+      window.location.href = getAppUrl('roadmap/');
     } else if (key === 's' || key === 'S') {
       e.preventDefault();
-      window.location.href = '/2026/august/';
+      window.location.href = getAppUrl('2026/august/');
     } else if (key === 'l' || key === 'L') {
       e.preventDefault();
-      window.location.href = '/history/';
+      window.location.href = getAppUrl('history/');
     }
   });
 }

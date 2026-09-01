@@ -9,8 +9,11 @@
   <link rel="manifest" href="{{ get_url(path='manifest.json') }}">
   <link rel="apple-touch-icon" href="{{ get_url(path='icons/icon-192.svg') }}">
   <title>{% block title %}{{ config.title }}{% endblock %}</title>
-  <link rel="stylesheet" href="{{ get_url(path='css/style.css') }}?v=20260901j">
-  <script src="{{ get_url(path='js/app.js') }}?v=20260901j" defer></script>
+  <link rel="stylesheet" href="{{ get_url(path='css/style.css') }}?v=20260901k">
+  <script>
+    window.SITE_BASE_URL = "{{ get_url(path='/') }}";
+  </script>
+  <script src="{{ get_url(path='js/app.js') }}?v=20260901k" defer></script>
 </head>
 <body>
 <div id="readingProgressBar" class="reading-progress-bar"></div>
