@@ -2867,6 +2867,16 @@ body {
     flex-shrink: 0 !important;
   }
 
+  .btn-text-desktop,
+  .badge-text-desktop {
+    display: none !important;
+  }
+
+  .btn-text-mobile,
+  .badge-text-mobile {
+    display: inline !important;
+  }
+
   .panel-header,
   .ppt-slide-header {
     height: auto !important;
@@ -2897,8 +2907,8 @@ body {
 
   .btn-history-action {
     height: 24px !important;
-    padding: 0 0.45rem !important;
-    font-size: 0.62rem !important;
+    padding: 0 0.55rem !important;
+    font-size: 0.65rem !important;
     font-weight: 700 !important;
     white-space: nowrap !important;
     line-height: 1 !important;
@@ -5190,6 +5200,16 @@ body.modal-open {
   background: rgba(255, 255, 255, 0.15);
   color: #ffffff;
   border-color: #ffffff;
+}
+
+.btn-text-desktop,
+.badge-text-desktop {
+  display: inline;
+}
+
+.btn-text-mobile,
+.badge-text-mobile {
+  display: none;
 }
 
 

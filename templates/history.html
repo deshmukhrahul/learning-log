@@ -59,11 +59,18 @@
   <main class="workbench-panel panel-center-stage" id="boxMain">
     <div class="ppt-slide-inner">
       <div class="ppt-slide-header">
-        <span class="ppt-badge">COMPLETED LABS LOG</span>
+        <span class="ppt-badge">
+          <span class="badge-text-desktop">COMPLETED LABS LOG</span>
+          <span class="badge-text-mobile">LABS LOG</span>
+        </span>
         <div class="history-actions">
-          <button class="btn-history-action" id="btnExportHistory" onclick="exportStudyHistory()" title="Export your completed labs and hours as JSON backup">EXPORT JSON</button>
+          <button class="btn-history-action" id="btnExportHistory" onclick="exportStudyHistory()" title="Export your completed labs and hours as JSON backup">
+            <span class="btn-text-desktop">EXPORT JSON</span>
+            <span class="btn-text-mobile">EXPORT</span>
+          </button>
           <label class="btn-history-action" title="Import completed labs from a JSON backup">
-            IMPORT JSON
+            <span class="btn-text-desktop">IMPORT JSON</span>
+            <span class="btn-text-mobile">IMPORT</span>
             <input type="file" id="importHistoryFile" accept=".json" onchange="importStudyHistory(event)" style="display: none;">
           </label>
         </div>
