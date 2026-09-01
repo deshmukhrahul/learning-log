@@ -1115,7 +1115,7 @@ function openRoadmapModal() {
   const modal = document.getElementById('roadmapModal');
   if (modal) {
     modal.classList.add('cyber-modal-open');
-    document.body.style.overflow = 'hidden';
+    document.body.classList.add('modal-open');
   }
 }
 
@@ -1123,19 +1123,27 @@ function closeRoadmapModal() {
   const modal = document.getElementById('roadmapModal');
   if (modal) {
     modal.classList.remove('cyber-modal-open');
-    document.body.style.overflow = '';
+    document.body.classList.remove('modal-open');
   }
 }
 
 function switchModalYear(year) {
-  const sec2026 = document.getElementById('modalYear2026');
-  const sec2027 = document.getElementById('modalYear2027');
-  if (year === '2026') {
-    if (sec2026) sec2026.style.display = 'block';
-    if (sec2027) sec2027.style.display = 'none';
-  } else {
-    if (sec2026) sec2026.style.display = 'none';
-    if (sec2027) sec2027.style.display = 'block';
+  document.querySelectorAll('.cm-year-section').forEach(sec => {
+    sec.style.display = 'none';
+  });
+  document.querySelectorAll('.cm-year-tab').forEach(tab => {
+    tab.classList.remove('active');
+  });
+  const targetSec = document.getElementById('modalYear' + year);
+  const targetTab = document.getElementById('tabYear' + year);
+  const select = document.getElementById('modalYearSelect');
+  if (targetSec) targetSec.style.display = 'block';
+  if (targetTab) {
+    targetTab.classList.add('active');
+    targetTab.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+  }
+  if (select && select.value !== year) {
+    select.value = year;
   }
 }
 
