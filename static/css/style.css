@@ -1246,7 +1246,11 @@ body {
   border-color: #ffffff !important;
 }
 
-/* Year Dropdown Selector inside Modal Header (Fallback) */
+/* Mobile Dropdown Wrapper (Hidden on Desktop) */
+.cm-year-select-wrap {
+  display: none;
+}
+
 .cm-year-select {
   background: #06090e;
   border: 1px solid rgba(255, 255, 255, 0.2);
@@ -3302,14 +3306,43 @@ body {
   }
 
   .cm-year-tabs {
-    display: inline-flex !important;
-    align-items: center !important;
-    gap: 0.25rem !important;
+    display: none !important;
   }
 
-  .cm-year-tab {
-    font-size: 0.68rem !important;
-    padding: 0.2rem 0.45rem !important;
+  .cm-year-select-wrap {
+    display: inline-flex !important;
+    position: relative !important;
+    align-items: center !important;
+    flex-shrink: 0 !important;
+  }
+
+  .cm-year-select {
+    background: #090e17 !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    color: #ffffff !important;
+    font-family: var(--font-mono) !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    height: 26px !important;
+    padding: 0 1.4rem 0 0.55rem !important;
+    letter-spacing: 0.05em !important;
+    text-transform: uppercase !important;
+    border-radius: 2px !important;
+    cursor: pointer !important;
+    outline: none !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    line-height: 1 !important;
+    max-width: 145px !important;
+  }
+
+  .cm-select-arrow {
+    position: absolute !important;
+    right: 0.45rem !important;
+    font-size: 0.5rem !important;
+    color: var(--text-dim) !important;
+    pointer-events: none !important;
     line-height: 1 !important;
   }
 

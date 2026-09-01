@@ -174,13 +174,15 @@
 
 </div>
 
-<!-- ── FULL ROADMAP MODAL WITH DYNAMIC YEAR TABS (SCALES TO 10+ YEARS) ── -->
+<!-- ── FULL ROADMAP MODAL WITH HYBRID YEAR CONTROLS (TABS ON DESKTOP, DROPDOWN ON MOBILE) ── -->
 <div id="roadmapModal" class="cyber-modal-backdrop" onclick="if(event.target===this)closeRoadmapModal()">
   <div class="cyber-modal-box">
     <div class="cyber-modal-header">
       <div class="cm-header-left">
         <span class="panel-badge cm-badge">ROADMAP</span>
         {% set root = get_section(path="_index.md") %}
+        
+        <!-- Desktop: Interactive Year Pill Tabs -->
         <div class="cm-year-tabs" id="cmYearTabs">
           {% for sec_path in root.subsections | sort %}
             {% set y_sec = get_section(path=sec_path) %}
@@ -189,6 +191,20 @@
               <button type="button" class="cm-year-tab {% if y_str == '2026' %}active{% endif %}" id="tabYear{{ y_str }}" onclick="switchModalYear('{{ y_str }}')">{{ y_str }}</button>
             {% endif %}
           {% endfor %}
+        </div>
+
+        <!-- Mobile: Compact Cyber Year Dropdown -->
+        <div class="cm-year-select-wrap">
+          <select class="cm-year-select" id="modalYearSelect" onchange="switchModalYear(this.value)" aria-label="Select Year">
+            {% for sec_path in root.subsections | sort %}
+              {% set y_sec = get_section(path=sec_path) %}
+              {% set y_str = y_sec.components[0] %}
+              {% if y_str is matching(pat="^[0-9]{4}$") %}
+                <option value="{{ y_str }}" {% if y_str == '2026' %}selected{% endif %}>{{ y_str }}{% if y_str == '2026' %} (ACTIVE){% endif %}</option>
+              {% endif %}
+            {% endfor %}
+          </select>
+          <span class="cm-select-arrow">▼</span>
         </div>
       </div>
       <button class="cyber-modal-close" onclick="closeRoadmapModal()" title="Close">
@@ -254,10 +270,14 @@ function switchModalYear(year) {
   });
   const targetSec = document.getElementById('modalYear' + year);
   const targetTab = document.getElementById('tabYear' + year);
+  const select = document.getElementById('modalYearSelect');
   if (targetSec) targetSec.style.display = 'block';
   if (targetTab) {
     targetTab.classList.add('active');
     targetTab.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+  }
+  if (select && select.value !== year) {
+    select.value = year;
   }
 }
 
