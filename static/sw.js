@@ -1,4 +1,4 @@
-const CACHE_NAME = 'systems-log-v6';
+const CACHE_NAME = 'systems-log-v7';
 const PRECACHE_ASSETS = [
   '/',
   '/css/style.css',

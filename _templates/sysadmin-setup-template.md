@@ -21,9 +21,9 @@ hours_spent = 3.0
 * **What are we deploying?**: [e.g. WireGuard Site-to-Site Mesh VPN with FreeBSD Gateway and Linux clients]
 * **End Result**: [e.g. Encrypted, authenticated L3 tunnel routing traffic across 10.10.0.0/24 subnet with automated failover, DNS leak protection, and sub-10ms latency]
 * **Success Criteria**:
-  * [x] Service starts automatically on boot (`systemd` / `rc.d`).
-  * [x] Firewall strictly drops unauthenticated packets.
-  * [x] Sustained throughput benchmark verified via `iperf3`.
+  * [ ] Service starts automatically on boot (`systemd` / `rc.d`).
+  * [ ] Firewall strictly drops unauthenticated packets.
+  * [ ] Sustained throughput benchmark verified via `iperf3`.
 
 ### Network & Data Flow:
 ![Architecture Diagram](/images/wireguard-architecture.svg)
@@ -194,4 +194,4 @@ sudo tar -czvf wireguard-backup-$(date +%F).tar.gz /etc/wireguard/
 - [ ] Private keys generated with strict `0600` permissions.
 - [ ] Interface running, authenticated handshake verified with `wg show`.
 - [ ] Latency verified under 15ms and throughput tested via `iperf3`.
-- [ ] System reboot test completed (`sudo reboot` $\rightarrow$ auto-start verified).
+- [ ] System reboot test completed (`sudo reboot` → auto-start verified).

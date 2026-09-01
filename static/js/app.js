@@ -772,8 +772,18 @@ function setupCodeCopyButtons() {
 
 /* ── INTERACTIVE DELIVERABLES CHECKLIST ENGINE ──────────────────────────── */
 function setupInteractiveChecklists() {
-  const listItems = Array.from(document.querySelectorAll('.lab-body ul li'));
-  const checklistItems = listItems.filter(li => li.querySelector('input[type="checkbox"]') || li.textContent.trim().startsWith('[ ]') || li.textContent.trim().startsWith('[x]'));
+  const listItems = Array.from(document.querySelectorAll('.lab-body li'));
+  const checklistItems = listItems.filter(li => {
+    // Only target actual checklist leaf items, not parent list containers
+    const directInput = li.querySelector(':scope > input[type="checkbox"]');
+    if (directInput) return true;
+    if (!li.querySelector('ul, ol')) {
+      const txt = li.textContent.trim();
+      return txt.startsWith('[ ]') || txt.startsWith('[x]') || txt.startsWith('[X]');
+    }
+    return false;
+  });
+
   if (!checklistItems.length) return;
 
   const currentPath = normalizeUrl(window.location.pathname);
@@ -800,8 +810,8 @@ function setupInteractiveChecklists() {
     li.classList.add('deliverable-item');
 
     // Find and remove existing input
-    const oldInput = li.querySelector('input[type="checkbox"]');
-    const isInitiallyChecked = oldInput ? oldInput.hasAttribute('checked') || oldInput.checked : false;
+    const oldInput = li.querySelector(':scope > input[type="checkbox"]') || li.querySelector('input[type="checkbox"]');
+    const isInitiallyChecked = oldInput ? (oldInput.hasAttribute('checked') || oldInput.checked) : false;
     if (oldInput) oldInput.remove();
 
     // Clean text and build custom elements

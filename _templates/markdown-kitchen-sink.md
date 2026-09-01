@@ -19,9 +19,9 @@ hours_spent = 2.0
 
 You can format text using standard Markdown syntax:
 
-* **Bold Text**: `**System Initialization**` $\rightarrow$ **System Initialization**
-* *Italic Text*: `*Kernel Socket Ring*` $\rightarrow$ *Kernel Socket Ring*
-* ~~Strikethrough~~: `~~Deprecated Syscall~~` $\rightarrow$ ~~Deprecated Syscall~~
+* **Bold Text**: `**System Initialization**` → **System Initialization**
+* *Italic Text*: `*Kernel Socket Ring*` → *Kernel Socket Ring*
+* ~~Strikethrough~~: `~~Deprecated Syscall~~` → ~~Deprecated Syscall~~
 * Inline Code: `` `sudo sysctl -w net.ipv4.ip_forward=1` ``
 * Keyboard Shortcuts: `<kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd>` or `<kbd>Esc</kbd>`
 * External Links: [Linux Kernel Documentation](https://www.kernel.org/doc/html/latest/)
