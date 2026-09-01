@@ -174,15 +174,21 @@
 
 </div>
 
-<!-- ── FULL 24-MONTH ROADMAP MODAL WITH YEAR DROPDOWN ──────────────────── -->
+<!-- ── FULL ROADMAP MODAL WITH DYNAMIC YEAR TABS (SCALES TO 10+ YEARS) ── -->
 <div id="roadmapModal" class="cyber-modal-backdrop" onclick="if(event.target===this)closeRoadmapModal()">
   <div class="cyber-modal-box">
     <div class="cyber-modal-header">
       <div class="cm-header-left">
         <span class="panel-badge cm-badge">ROADMAP</span>
-        <div class="cm-year-tabs">
-          <button type="button" class="cm-year-tab active" id="tabYear2026" onclick="switchModalYear('2026')">2026</button>
-          <button type="button" class="cm-year-tab" id="tabYear2027" onclick="switchModalYear('2027')">2027</button>
+        {% set root = get_section(path="_index.md") %}
+        <div class="cm-year-tabs" id="cmYearTabs">
+          {% for sec_path in root.subsections | sort %}
+            {% set y_sec = get_section(path=sec_path) %}
+            {% set y_str = y_sec.components[0] %}
+            {% if y_str is matching(pat="^[0-9]{4}$") %}
+              <button type="button" class="cm-year-tab {% if y_str == '2026' %}active{% endif %}" id="tabYear{{ y_str }}" onclick="switchModalYear('{{ y_str }}')">{{ y_str }}</button>
+            {% endif %}
+          {% endfor %}
         </div>
       </div>
       <button class="cyber-modal-close" onclick="closeRoadmapModal()" title="Close">
@@ -191,52 +197,33 @@
       </button>
     </div>
     <div class="cyber-modal-body">
-      <!-- Year 2026 Content (Active Default) -->
-      <div class="cm-year-section" id="modalYear2026">
-        <div class="minimal-rows-list">
-          {% for sub_path in y2026_sec.subsections %}
-            {% set sub_s = get_section(path=sub_path) %}
-            {% set is_active = sub_path == config.extra.active_section_path %}
-            {% set is_done = sub_s.extra.badge == 'DONE' %}
-            <a href="{{ sub_s.permalink }}" class="minimal-row {% if is_active %}minimal-row-active{% elif is_done %}minimal-row-done{% else %}minimal-row-queued{% endif %}" title="{{ sub_s.title | split(pat='— ') | last }} — {{ sub_s.extra.topic }}">
-              <div class="mr-left">
-                <span class="mr-day">{{ sub_s.extra.month | default(value='SPRINT') | upper | truncate(length=3, end='') }} {{ sub_s.extra.year | default(value='2026') }}</span>
-                <span class="mr-title" title="{{ sub_s.title | split(pat='— ') | last }}">{{ sub_s.title | split(pat="— ") | last }}</span>
-              </div>
-              <div class="mr-right">
-                <span class="mr-topic" title="{{ sub_s.extra.topic }}">{{ sub_s.extra.topic }}</span>
-                <span class="mr-status {% if is_active %}mr-status-active{% endif %}">
-                  {% if is_active %}ACTIVE{% elif is_done %}DONE{% else %}QUEUED{% endif %}
-                </span>
-              </div>
-            </a>
-          {% endfor %}
-        </div>
-      </div>
-
-      <!-- Year 2027 Content -->
-      <div class="cm-year-section" id="modalYear2027" style="display: none;">
-        <div class="minimal-rows-list">
-          {% for sub_path in y2027_sec.subsections %}
-            {% set sub_s = get_section(path=sub_path) %}
-            {% set is_active = sub_path == config.extra.active_section_path %}
-            {% set is_done = sub_s.extra.badge == 'DONE' %}
-            <a href="{{ sub_s.permalink }}" class="minimal-row {% if is_active %}minimal-row-active{% elif is_done %}minimal-row-done{% else %}minimal-row-queued{% endif %}" title="{{ sub_s.title | split(pat='— ') | last }} — {{ sub_s.extra.topic }}">
-              <div class="mr-left">
-                <span class="mr-day">{{ sub_s.extra.month | default(value='SPRINT') | upper | truncate(length=3, end='') }} {{ sub_s.extra.year | default(value='2027') }}</span>
-                <span class="mr-title" title="{{ sub_s.title | split(pat='— ') | last }}">{{ sub_s.title | split(pat="— ") | last }}</span>
-              </div>
-              <div class="mr-right">
-                <span class="mr-topic" title="{{ sub_s.extra.topic }}">{{ sub_s.extra.topic }}</span>
-                <span class="mr-status {% if is_active %}mr-status-active{% endif %}">
-                  {% if is_active %}ACTIVE{% elif is_done %}DONE{% else %}QUEUED{% endif %}
-                </span>
-              </div>
-            </a>
-          {% endfor %}
-        </div>
-      </div>
-
+      {% for sec_path in root.subsections | sort %}
+        {% set y_sec = get_section(path=sec_path) %}
+        {% set y_str = y_sec.components[0] %}
+        {% if y_str is matching(pat="^[0-9]{4}$") %}
+          <div class="cm-year-section" id="modalYear{{ y_str }}" {% if y_str != '2026' %}style="display: none;"{% endif %}>
+            <div class="minimal-rows-list">
+              {% for sub_path in y_sec.subsections %}
+                {% set sub_s = get_section(path=sub_path) %}
+                {% set is_active = sub_path == config.extra.active_section_path %}
+                {% set is_done = sub_s.extra.badge == 'DONE' %}
+                <a href="{{ sub_s.permalink }}" class="minimal-row {% if is_active %}minimal-row-active{% elif is_done %}minimal-row-done{% else %}minimal-row-queued{% endif %}" title="{{ sub_s.title | split(pat='— ') | last }} — {{ sub_s.extra.topic }}">
+                  <div class="mr-left">
+                    <span class="mr-day">{{ sub_s.extra.month | default(value='SPRINT') | upper | truncate(length=3, end='') }} {{ sub_s.extra.year | default(value=y_str) }}</span>
+                    <span class="mr-title" title="{{ sub_s.title | split(pat='— ') | last }}">{{ sub_s.title | split(pat="— ") | last }}</span>
+                  </div>
+                  <div class="mr-right">
+                    <span class="mr-topic" title="{{ sub_s.extra.topic }}">{{ sub_s.extra.topic }}</span>
+                    <span class="mr-status {% if is_active %}mr-status-active{% endif %}">
+                      {% if is_active %}ACTIVE{% elif is_done %}DONE{% else %}QUEUED{% endif %}
+                    </span>
+                  </div>
+                </a>
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
     </div>
   </div>
 </div>
@@ -259,21 +246,18 @@ function closeRoadmapModal() {
 }
 
 function switchModalYear(year) {
-  const sec2026 = document.getElementById('modalYear2026');
-  const sec2027 = document.getElementById('modalYear2027');
-  const tab2026 = document.getElementById('tabYear2026');
-  const tab2027 = document.getElementById('tabYear2027');
-
-  if (year === '2026') {
-    if (sec2026) sec2026.style.display = 'block';
-    if (sec2027) sec2027.style.display = 'none';
-    if (tab2026) tab2026.classList.add('active');
-    if (tab2027) tab2027.classList.remove('active');
-  } else {
-    if (sec2027) sec2027.style.display = 'block';
-    if (sec2026) sec2026.style.display = 'none';
-    if (tab2027) tab2027.classList.add('active');
-    if (tab2026) tab2026.classList.remove('active');
+  document.querySelectorAll('.cm-year-section').forEach(sec => {
+    sec.style.display = 'none';
+  });
+  document.querySelectorAll('.cm-year-tab').forEach(tab => {
+    tab.classList.remove('active');
+  });
+  const targetSec = document.getElementById('modalYear' + year);
+  const targetTab = document.getElementById('tabYear' + year);
+  if (targetSec) targetSec.style.display = 'block';
+  if (targetTab) {
+    targetTab.classList.add('active');
+    targetTab.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
   }
 }
 
