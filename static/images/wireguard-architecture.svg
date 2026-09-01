@@ -1,0 +1,124 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 460" width="100%" height="100%" style="background-color: #0b0f17; border-radius: 8px; border: 1px solid rgba(255,255,255,0.12); font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+  <defs>
+    <!-- Filter for subtle hand-drawn sketch effect -->
+    <filter id="rough-paper" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" result="noise" />
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.5" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+
+    <!-- Markers for Arrows -->
+    <marker id="arrow-cyan" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" />
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#4ade80" />
+    </marker>
+    <marker id="arrow-purple" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#c084fc" />
+    </marker>
+  </defs>
+
+  <!-- Grid Dots Background (Excalidraw style) -->
+  <pattern id="dot-grid" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
+    <circle cx="2" cy="2" r="1" fill="rgba(255, 255, 255, 0.06)" />
+  </pattern>
+  <rect width="100%" height="100%" fill="url(#dot-grid)" />
+
+  <!-- TITLE BADGE -->
+  <g transform="translate(40, 30)">
+    <rect x="0" y="0" width="360" height="34" rx="4" fill="rgba(56, 189, 248, 0.08)" stroke="#38bdf8" stroke-width="1.2" stroke-dasharray="4 2" />
+    <text x="14" y="22" fill="#38bdf8" font-size="13" font-weight="700" letter-spacing="1.5">⚡ ARCHITECTURE: WIREGUARD MESH</text>
+  </g>
+
+  <!-- 1. CLIENT NODE (Remote Worker) -->
+  <g transform="translate(40, 150)">
+    <!-- Card Shadow & Border -->
+    <rect x="0" y="0" width="220" height="180" rx="8" fill="#131b26" stroke="#38bdf8" stroke-width="2" />
+    <rect x="6" y="6" width="208" height="36" rx="4" fill="rgba(56, 189, 248, 0.12)" />
+    <!-- Icon & Header -->
+    <text x="16" y="30" fill="#ffffff" font-size="15" font-weight="700">💻 Client Node</text>
+    <!-- Metadata Badges -->
+    <text x="16" y="70" fill="#94a3b8" font-size="12">Role: <tspan fill="#e2e8f0" font-weight="600">Road Warrior</tspan></text>
+    <text x="16" y="95" fill="#94a3b8" font-size="12">OS: <tspan fill="#e2e8f0" font-weight="600">FreeBSD / Linux</tspan></text>
+    
+    <rect x="14" y="115" width="190" height="24" rx="3" fill="#0f172a" stroke="rgba(255,255,255,0.1)" />
+    <text x="22" y="131" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="11">IP: 10.10.0.2/32</text>
+
+    <rect x="14" y="145" width="190" height="22" rx="3" fill="rgba(74, 222, 128, 0.1)" stroke="rgba(74, 222, 128, 0.3)" />
+    <text x="22" y="160" fill="#4ade80" font-size="10" font-weight="700">STATE: AUTHENTICATED</text>
+  </g>
+
+  <!-- ARROW 1: Client -> Gateway (Encrypted Wire) -->
+  <g>
+    <path d="M 260 240 Q 320 200 370 240" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="6 3" marker-end="url(#arrow-cyan)" />
+    <!-- Packet Label Pill -->
+    <rect x="270" y="180" width="110" height="26" rx="13" fill="#1e293b" stroke="#38bdf8" stroke-width="1.2" />
+    <text x="282" y="197" fill="#38bdf8" font-size="11" font-weight="600">UDP: 51820</text>
+    <text x="282" y="222" fill="#64748b" font-size="10">ChaCha20-Poly1305</text>
+  </g>
+
+  <!-- 2. CENTRAL GATEWAY / HUB (Cloud VPS) -->
+  <g transform="translate(380, 130)">
+    <!-- Card Shadow & Border -->
+    <rect x="0" y="0" width="230" height="220" rx="8" fill="#131b26" stroke="#ffffff" stroke-width="2" />
+    <rect x="6" y="6" width="218" height="38" rx="4" fill="rgba(255, 255, 255, 0.08)" />
+    <!-- Header -->
+    <text x="16" y="31" fill="#ffffff" font-size="15" font-weight="700">🛡️ WireGuard Gateway</text>
+    
+    <text x="16" y="72" fill="#94a3b8" font-size="12">WAN: <tspan fill="#ffffff" font-family="'JetBrains Mono', monospace">203.0.113.10</tspan></text>
+    <text x="16" y="96" fill="#94a3b8" font-size="12">Kernel: <tspan fill="#e2e8f0" font-weight="600">Linux 6.8 / if_wg</tspan></text>
+
+    <rect x="14" y="115" width="200" height="24" rx="3" fill="#0f172a" stroke="rgba(255,255,255,0.1)" />
+    <text x="22" y="131" fill="#4ade80" font-family="'JetBrains Mono', monospace" font-size="11">Tunnel: 10.10.0.1/24</text>
+
+    <rect x="14" y="146" width="200" height="30" rx="3" fill="#1e293b" stroke="rgba(255,255,255,0.08)" />
+    <text x="22" y="165" fill="#cbd5e1" font-size="11">NAT Masquerade: <tspan fill="#38bdf8" font-weight="700">ACTIVE</tspan></text>
+
+    <rect x="14" y="184" width="200" height="22" rx="3" fill="rgba(56, 189, 248, 0.1)" stroke="rgba(56, 189, 248, 0.3)" />
+    <text x="22" y="199" fill="#38bdf8" font-size="10" font-weight="700">IP FORWARDING: ENABLED</text>
+  </g>
+
+  <!-- ARROWS FROM GATEWAY TO DESTINATIONS -->
+  <!-- Arrow to Storage Pool -->
+  <path d="M 610 200 L 680 150" fill="none" stroke="#4ade80" stroke-width="2" stroke-dasharray="5 3" marker-end="url(#arrow-green)" />
+  <!-- Arrow to Protected LAN -->
+  <path d="M 610 240 L 680 240" fill="none" stroke="#38bdf8" stroke-width="2" stroke-dasharray="5 3" marker-end="url(#arrow-cyan)" />
+  <!-- Arrow to DNS Resolver -->
+  <path d="M 610 280 L 680 330" fill="none" stroke="#c084fc" stroke-width="2" stroke-dasharray="5 3" marker-end="url(#arrow-purple)" />
+
+  <!-- 3. TARGET DESTINATIONS (Right Column) -->
+
+  <!-- 3A. FreeBSD Storage Node -->
+  <g transform="translate(690, 80)">
+    <rect x="0" y="0" width="220" height="90" rx="6" fill="#131b26" stroke="#4ade80" stroke-width="1.8" />
+    <text x="14" y="26" fill="#ffffff" font-size="13" font-weight="700">📦 FreeBSD ZFS Node</text>
+    <text x="14" y="48" fill="#94a3b8" font-size="11">ZFS Pool: <tspan fill="#4ade80">tank/data</tspan></text>
+    <rect x="12" y="58" width="195" height="20" rx="3" fill="#0f172a" />
+    <text x="18" y="72" fill="#4ade80" font-family="'JetBrains Mono', monospace" font-size="10.5">IP: 10.10.0.3/32 (WireGuard)</text>
+  </g>
+
+  <!-- 3B. Protected LAN Subnet -->
+  <g transform="translate(690, 195)">
+    <rect x="0" y="0" width="220" height="90" rx="6" fill="#131b26" stroke="#38bdf8" stroke-width="1.8" />
+    <text x="14" y="26" fill="#ffffff" font-size="13" font-weight="700">🌐 Private Subnet</text>
+    <text x="14" y="48" fill="#94a3b8" font-size="11">Homelab LAN Infrastructure</text>
+    <rect x="12" y="58" width="195" height="20" rx="3" fill="#0f172a" />
+    <text x="18" y="72" fill="#38bdf8" font-family="'JetBrains Mono', monospace" font-size="10.5">Subnet: 192.168.1.0/24</text>
+  </g>
+
+  <!-- 3C. Secure Unbound DNS -->
+  <g transform="translate(690, 310)">
+    <rect x="0" y="0" width="220" height="90" rx="6" fill="#131b26" stroke="#c084fc" stroke-width="1.8" />
+    <text x="14" y="26" fill="#ffffff" font-size="13" font-weight="700">🔒 Unbound DNS Resolver</text>
+    <text x="14" y="48" fill="#94a3b8" font-size="11">DNS Leak Protection &amp; DoT</text>
+    <rect x="12" y="58" width="195" height="20" rx="3" fill="#0f172a" />
+    <text x="18" y="72" fill="#c084fc" font-family="'JetBrains Mono', monospace" font-size="10.5">Listen: 10.10.0.1:53</text>
+  </g>
+
+  <!-- BOTTOM STATUS BAR -->
+  <g transform="translate(40, 420)">
+    <text x="0" y="16" fill="#64748b" font-size="11">PROTOCOL: <tspan fill="#cbd5e1" font-weight="600">WIREGUARD L3 TUNNEL</tspan></text>
+    <text x="240" y="16" fill="#64748b" font-size="11">HANDSHAKE INTERVAL: <tspan fill="#cbd5e1" font-weight="600">RE-KEY EVERY 120s</tspan></text>
+    <text x="520" y="16" fill="#64748b" font-size="11">SECURITY: <tspan fill="#4ade80" font-weight="600">NO WAN PLAINTEXT LEAKS</tspan></text>
+  </g>
+</svg>

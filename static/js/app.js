@@ -129,7 +129,13 @@ document.addEventListener('DOMContentLoaded', () => {
   // 13. Global keyboard shortcuts & help modal
   setupGlobalKeyboardShortcuts();
 
-  // 14. PWA Offline Service Worker Registration
+  // 14. Interactive HUD Tabs
+  setupHudTabs();
+
+  // 15. GitHub Style Callout Alert Boxes
+  setupCalloutBoxes();
+
+  // 16. PWA Offline Service Worker Registration
   registerServiceWorker();
 });
 
@@ -723,13 +729,22 @@ function setupCodeCopyButtons() {
 
     const code = pre.querySelector('code');
     const langMatch = (code ? code.className : '').match(/language-([a-zA-Z0-9_\-]+)/);
-    const lang = langMatch ? langMatch[1].toUpperCase() : 'CODE';
+    let lang = langMatch ? langMatch[1].toUpperCase() : 'CODE';
+
+    const rawText = code ? code.innerText : pre.innerText;
+    const isUntypedOrText = lang === 'CODE' || lang === 'ASCII' || lang === 'DIAGRAM' || lang === 'TEXT';
+    const isAsciiDiagram = (isUntypedOrText && /[┌└┐┘├┤┬┴┼═║╔╗╚╝╠╣╦╩╬]/.test(rawText)) || lang === 'ASCII' || lang === 'DIAGRAM';
+
+    if (isAsciiDiagram) {
+      lang = 'ARCHITECTURE DIAGRAM';
+      pre.classList.add('ascii-art-block');
+    }
 
     const toolbar = document.createElement('div');
     toolbar.className = 'code-toolbar';
 
     const badge = document.createElement('span');
-    badge.className = 'code-lang-badge';
+    badge.className = 'code-lang-badge' + (isAsciiDiagram ? ' is-diagram' : '');
     badge.textContent = lang;
 
     const copyBtn = document.createElement('button');
@@ -917,7 +932,8 @@ function setupHudSimulators() {
       let targetHtml = '';
       if (step.target) {
         const isConflict = /conflict|flap|damaged|stress|thrashing|unavail/i.test(step.target.state);
-        const conduitLabel = step.conduit ? step.conduit.label : '';
+        const rawConduit = step.conduit ? step.conduit.label : '';
+        const conduitLabel = rawConduit.replace(/(──►|-->|->|=>|⟶|→|──>)/g, '<span class="hud-conduit-arrow">➔</span>');
 
         targetHtml = `
           <div class="hud-conduit-wrap">
@@ -1575,3 +1591,65 @@ function registerServiceWorker() {
     });
   }
 }
+
+/* ── INTERACTIVE HUD TABS ENGINE ─────────────────────────────────────────── */
+function setupHudTabs() {
+  const tabContainers = document.querySelectorAll('.hud-tabs');
+  tabContainers.forEach((container) => {
+    if (container.querySelector('.hud-tabs-nav')) return;
+
+    const tabs = Array.from(container.querySelectorAll(':scope > .hud-tab'));
+    if (!tabs.length) return;
+
+    const nav = document.createElement('div');
+    nav.className = 'hud-tabs-nav';
+
+    tabs.forEach((tab, idx) => {
+      tab.classList.add('hud-tab-content');
+      const title = tab.getAttribute('data-tab') || `Tab ${idx + 1}`;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'hud-tab-btn' + (idx === 0 ? ' active' : '');
+      btn.textContent = title;
+
+      btn.addEventListener('click', () => {
+        nav.querySelectorAll('.hud-tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        tabs.forEach(t => t.style.display = 'none');
+        tab.style.display = 'block';
+      });
+
+      nav.appendChild(btn);
+      tab.style.display = idx === 0 ? 'block' : 'none';
+    });
+
+    container.insertBefore(nav, tabs[0]);
+  });
+}
+
+/* ── GITHUB STYLE CALLOUT ALERT PARSER ───────────────────────────────────── */
+function setupCalloutBoxes() {
+  const blockquotes = document.querySelectorAll('.lab-body blockquote');
+  blockquotes.forEach((bq) => {
+    const text = bq.innerHTML;
+    const alertMap = [
+      { key: '[!NOTE]', type: 'note', title: 'NOTE' },
+      { key: '[!TIP]', type: 'tip', title: 'TIP' },
+      { key: '[!IMPORTANT]', type: 'important', title: 'IMPORTANT' },
+      { key: '[!WARNING]', type: 'warning', title: 'WARNING' },
+      { key: '[!CAUTION]', type: 'caution', title: 'CAUTION' }
+    ];
+
+    for (const alert of alertMap) {
+      if (text.includes(alert.key)) {
+        bq.classList.add('hud-callout', `hud-callout-${alert.type}`);
+        bq.innerHTML = text.replace(
+          alert.key,
+          `<span class="hud-callout-badge hud-callout-badge-${alert.type}">${alert.title}</span>`
+        );
+        break;
+      }
+    }
+  });
+}
+

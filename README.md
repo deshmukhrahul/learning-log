@@ -90,33 +90,22 @@ cargo install --locked zola
 
 ---
 
-## Adding New Curriculum Content
+## Adding New Curriculum Content & Labs
 
-Create a Markdown file in `content/<year>/<month>/day-XX-<topic>.md`:
+To create a new runbook or lab without starting from scratch, use the ready-made starter template in `_templates/`:
 
-```toml
-+++
-title = "Lab 01: Linux Process Tracing & System Calls"
-description = "Inspect running Linux processes, system calls, and build a lightweight process monitor."
-date = 2026-09-01
-weight = 10
-
-[extra]
-month = "SEPTEMBER"
-year = 2026
-day = "01"
-hours_spent = 2.5
-+++
-
-## 1. THE BRIEF
-Your lab brief and architecture explanations...
-
-## 4. DAILY DELIVERABLES CHECKLIST
-- [ ] Compile and verify the tracing program.
-- [ ] Capture kernel trace output.
+### 1. Create a New Setup Runbook:
+```bash
+# Duplicate the sysadmin runbook template into your target year and month:
+mkdir -p content/2026/september
+cp _templates/sysadmin-setup-template.md content/2026/september/day-01-wireguard-mesh.md
 ```
 
-Zola and the template engine automatically index the new lab in search, syllabus cards, and telemetry tracking.
+### 2. Component & Formatting Reference:
+* Refer to `_templates/markdown-kitchen-sink.md` for live examples of multi-OS tabs, callout boxes, matrix tables, and vector architecture diagrams.
+
+### 3. Edit & Build:
+Open your new Markdown files, add your notes/code, and run `zola build` or `zola serve`. Zola automatically indexes the new lab in search, syllabus cards, telemetry trackers, and the multi-year roadmap!
 
 ---
 

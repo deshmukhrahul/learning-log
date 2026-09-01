@@ -2035,6 +2035,221 @@ body {
   margin: 1.25rem 0;
 }
 
+/* ── PROSE MARKDOWN HYPERLINKS ── */
+.lab-body a {
+  color: #38bdf8;
+  text-decoration: underline;
+  text-decoration-color: rgba(56, 189, 248, 0.4);
+  text-underline-offset: 4px;
+  font-weight: 600;
+  transition: all 0.15s ease;
+}
+
+.lab-body a:hover {
+  color: #ffffff;
+  text-decoration-color: #38bdf8;
+  text-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
+}
+
+/* ── PROSE DATA TABLES & MATRICES ── */
+.lab-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  background: rgba(10, 15, 25, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  overflow: hidden;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+}
+
+.lab-body thead {
+  background: rgba(0, 0, 0, 0.6);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.25);
+}
+
+.lab-body th {
+  font-family: var(--font-heading);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #ffffff;
+  padding: 0.85rem 1rem;
+  text-align: left;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.lab-body th:last-child {
+  border-right: none;
+}
+
+.lab-body tbody tr {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  transition: background 0.15s ease;
+}
+
+.lab-body tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.lab-body tbody tr:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.lab-body tbody tr:last-child {
+  border-bottom: none;
+}
+
+.lab-body td {
+  padding: 0.85rem 1rem;
+  color: var(--text-main);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  line-height: 1.45;
+  vertical-align: middle;
+}
+
+.lab-body td:last-child {
+  border-right: none;
+}
+
+.lab-body td code {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 0.15rem 0.45rem;
+  border-radius: 3px;
+  font-size: 0.82rem;
+  color: #ffffff;
+}
+
+/* ── HUD CALLOUT ALERT BOXES ── */
+.lab-body blockquote.hud-callout {
+  border-left-width: 3px;
+  position: relative;
+  padding: 0.9rem 1.25rem;
+  background: rgba(10, 15, 25, 0.6);
+  border-radius: 2px;
+  margin: 1rem 0;
+}
+.lab-body blockquote.hud-callout-note {
+  border-left-color: #38bdf8;
+  border-top: 1px solid rgba(56, 189, 248, 0.2);
+  border-right: 1px solid rgba(56, 189, 248, 0.2);
+  border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+}
+.lab-body blockquote.hud-callout-tip {
+  border-left-color: #4ade80;
+  border-top: 1px solid rgba(74, 222, 128, 0.2);
+  border-right: 1px solid rgba(74, 222, 128, 0.2);
+  border-bottom: 1px solid rgba(74, 222, 128, 0.2);
+}
+.lab-body blockquote.hud-callout-important {
+  border-left-color: #a855f7;
+  border-top: 1px solid rgba(168, 85, 247, 0.2);
+  border-right: 1px solid rgba(168, 85, 247, 0.2);
+  border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+}
+.lab-body blockquote.hud-callout-warning {
+  border-left-color: #fbbf24;
+  border-top: 1px solid rgba(251, 191, 36, 0.2);
+  border-right: 1px solid rgba(251, 191, 36, 0.2);
+  border-bottom: 1px solid rgba(251, 191, 36, 0.2);
+}
+.lab-body blockquote.hud-callout-caution {
+  border-left-color: #f87171;
+  border-top: 1px solid rgba(248, 113, 113, 0.2);
+  border-right: 1px solid rgba(248, 113, 113, 0.2);
+  border-bottom: 1px solid rgba(248, 113, 113, 0.2);
+}
+.hud-callout-badge {
+  display: inline-block;
+  font-family: var(--font-heading);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 0.15rem 0.5rem;
+  margin-right: 0.6rem;
+  border-radius: 2px;
+  vertical-align: middle;
+}
+.hud-callout-badge-note { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid #38bdf8; }
+.hud-callout-badge-tip { background: rgba(74, 222, 128, 0.15); color: #4ade80; border: 1px solid #4ade80; }
+.hud-callout-badge-important { background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid #a855f7; }
+.hud-callout-badge-warning { background: rgba(251, 191, 36, 0.15); color: #fbbf24; border: 1px solid #fbbf24; }
+.hud-callout-badge-caution { background: rgba(248, 113, 113, 0.15); color: #f87171; border: 1px solid #f87171; }
+
+/* ── HUD TABS ── */
+.hud-tabs {
+  margin: 1.25rem 0;
+  background: rgba(10, 15, 25, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.hud-tabs-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  background: rgba(0, 0, 0, 0.5);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+.hud-tab-btn {
+  background: transparent;
+  border: none;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 2px solid transparent;
+  color: var(--text-muted);
+  font-family: var(--font-heading);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.65rem 1.15rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.hud-tab-btn:hover {
+  color: var(--text-main);
+  background: rgba(255, 255, 255, 0.04);
+}
+.hud-tab-btn.active {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+  border-bottom-color: #ffffff;
+}
+.hud-tab-content {
+  padding: 1.25rem;
+}
+.hud-tab-content > *:first-child {
+  margin-top: 0;
+}
+.hud-tab-content > *:last-child {
+  margin-bottom: 0;
+}
+
+/* ── KBD & IMAGES ── */
+.lab-body kbd {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  padding: 0.15rem 0.45rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.4);
+  border-radius: 3px;
+  color: #ffffff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+.lab-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  margin: 1.25rem auto;
+  display: block;
+}
+
 /* ── 6. INTERACTIVE LAB COMPLETION GATE CARD (OPTION C) ──────────────────── */
 .lab-complete-section {
   margin-top: 2rem;
@@ -4845,6 +5060,18 @@ body.modal-open {
   white-space: normal;
   border-radius: 2px;
   line-height: 1.45;
+}
+
+.hud-conduit-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 0.5rem;
+  color: #38bdf8;
+  font-weight: 900;
+  font-size: 0.95rem;
+  line-height: 1;
+  vertical-align: middle;
 }
 
 /* Core Target Switch / Engine Card */

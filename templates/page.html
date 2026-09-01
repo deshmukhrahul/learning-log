@@ -90,15 +90,15 @@
     <div class="complete-card">
       <div class="complete-meta">
         <span class="complete-eyebrow">LAB COMPLETION GATE</span>
-        <h3 class="complete-title">Finished Today's Coding Session?</h3>
-        <p class="complete-desc">Marking this lab complete banks +{{ page.extra.hours_spent | default(value="2.5") }} hours to your progress log and advances your sprint momentum.</p>
+        <h3 class="complete-title">Finished Today's Lab Session?</h3>
+        <p class="complete-desc">Marking this complete banks +{{ page.extra.hours_spent | default(value="2.0") }} hours to your progress log and advances your sprint momentum.</p>
       </div>
       <button class="btn-mark-complete" id="btnMarkComplete"
         data-day="{{ page.extra.day | default(value=1) }}"
-        data-hours="{{ page.extra.hours_spent | default(value='2.5') }}"
+        data-hours="{{ page.extra.hours_spent | default(value='2.0') }}"
         data-title="{{ page.title }}"
         data-url="{{ current_path | default(value=page.permalink) }}">
-        <span class="btn-complete-text">MARK LAB COMPLETE</span>
+        <span class="btn-complete-text">MARK COMPLETE</span>
       </button>
     </div>
   </div>

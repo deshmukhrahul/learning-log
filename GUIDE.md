@@ -205,26 +205,18 @@ The site features an inline system simulator that converts structured Markdown D
 
 ## 8. How to Author a New Daily Lab
 
-1. **Create a Markdown File:**
-   Create a `.md` file inside the target month directory (e.g. `content/2026/september/ebpf-tracing.md` or `content/2028/january/day-01-rust-kernel-drivers.md`).
+Ready-made starter templates are provided in the `_templates/` directory so you never have to write boilerplate or frontmatter from scratch:
 
-2. **Add Frontmatter Metadata:**
-   ```toml
-   +++
-   title = "Lab 01: Linux Process Tracing & System Calls"
-   description = "Inspect running Linux processes, system calls, and build a lightweight process monitor."
-   date = 2026-09-01
-   weight = 10
-
-   [extra]
-   month = "SEPTEMBER"
-   year = 2026
-   day = "01"
-   hours_spent = 2.5
-   +++
+1. **Duplicate the SysAdmin Setup & Runbook Template:**
+   ```bash
+   mkdir -p content/2026/september
+   cp _templates/sysadmin-setup-template.md content/2026/september/day-01-wireguard-mesh.md
    ```
 
-3. **Standard 4-Part Lab Structure:**
+2. **Visual Markdown & Component Reference:**
+   * Refer to `_templates/markdown-kitchen-sink.md` for live examples of callout alerts, multi-OS tabs, tables, code blocks, and Excalidraw vector diagrams.
+
+3. **Standard Runbook Structure (Pre-formatted in Template):**
    * **Section 1: The Brief** — Architecture fundamentals and memory pipeline.
    * **Interactive Visualizer** — Optional `<div class="hud-simulator">` interactive hardware block.
    * **Section 2: Hands-on Experiment** — Complete, runnable Go / C / Rust implementation with 1-click copy toolbar.
