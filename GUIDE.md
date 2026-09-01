@@ -42,9 +42,8 @@ A high-performance, zero-dependency systems engineering curriculum and daily lab
 ├── config.toml                 # Global SSG parameters, track focus, active sprint
 ├── content/                    # Markdown content hierarchy
 │   ├── _index.md               # Root section (mounts Home Cockpit index.html)
-│   ├── roadmap/                # Master 24-Month Roadmap section & pages
+│   ├── roadmap/                # Master Multi-Year Roadmap section & pages
 │   ├── history/                # Verified Lab History section & pages
-│   ├── stack/                  # Architecture & Technology stack pages
 │   ├── 2026/                   # Year 1 Curriculum
 │   │   ├── _index.md           # Year 1 section metadata
 │   │   ├── august/             # Month sprint directory
