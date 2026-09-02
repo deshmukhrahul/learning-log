@@ -8,7 +8,7 @@ build_search_index = false
 author = "Systems Engineer"
 track = "LINUX SYSTEMS ENGINEERING"
 focus = "KERNEL, NETWORKING & GO"
-asset_version = "20260901k"
+asset_version = "20260902k"
 
 # Active coordinates
 active_section_path = "2026/august/_index.md"

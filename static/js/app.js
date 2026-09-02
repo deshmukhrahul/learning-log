@@ -1252,25 +1252,6 @@ function initSearch() {
   }
 }
 
-// Delete the entire parseSearchIndex function.
-
-function parseSearchIndex(rawData) {
-  searchIndex = [];
-  rawData.split('\n').forEach(line => {
-    const parts = line.split('|').map(s => s.trim());
-    if (parts.length >= 2 && parts[0] && parts[1]) {
-      searchIndex.push({
-        title: parts[0],
-        url: parts[1],
-        os: parts[2] || '2026',
-        category: parts[3] || 'SYSTEMS',
-        summary: parts[4] || '',
-        commands: parts[5] || ''
-      });
-    }
-  });
-}
-
 function executeSearch(query) {
   query = (query || '').trim();
   if (!query) return [];
