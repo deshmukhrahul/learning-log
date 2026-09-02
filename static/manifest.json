@@ -2,21 +2,21 @@
   "name": "Systems Engineering Learning Log",
   "short_name": "Systems Log",
   "description": "High-intensity systems engineering curriculum, daily lab journal, and telemetry dashboard.",
-  "start_url": "/",
-  "scope": "/",
+  "start_url": "/learning-log/",
+  "scope": "/learning-log/",
   "display": "standalone",
   "orientation": "any",
   "background_color": "#06090e",
   "theme_color": "#06090e",
   "icons": [
     {
-      "src": "/icons/icon-192.svg",
+      "src": "/learning-log/icons/icon-192.svg",
       "sizes": "192x192",
       "type": "image/svg+xml",
       "purpose": "any maskable"
     },
     {
-      "src": "/icons/icon-512.svg",
+      "src": "/learning-log/icons/icon-512.svg",
       "sizes": "512x512",
       "type": "image/svg+xml",
       "purpose": "any maskable"

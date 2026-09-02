@@ -44,6 +44,20 @@ function saveUserState(state) {
   }
 }
 
+function computeTotals(userState) {
+  const rawList = userState.completedLabs || [];
+  const sessions = userState.sessions || [];
+  const count = Math.max(rawList.length, sessions.length);
+
+  let totalHours = 0;
+  sessions.forEach(s => { totalHours += parseFloat(s.hours || 2.5); });
+  if (totalHours === 0 && count > 0) {
+    totalHours = count * 2.5;
+  }
+
+  return { count, totalHours };
+}
+
 // Cross-tab and window synchronization
 window.addEventListener('storage', (e) => {
   if (e.key === STORAGE_KEY) {
@@ -158,31 +172,21 @@ function isLabDone(lab, userState) {
   };
 
   const labSlug = extractSlug(lab.url || lab.path || '');
-  const labDayNum = parseInt(lab.day, 10);
-  const labTitleStr = (lab.title || '').trim().toLowerCase();
 
-  // 1. Direct path / slug matching in completedLabs
+  // 1. completedLabs — exact slug or normalized URL
   for (const raw of rawList) {
     if (!raw) continue;
     const rawSlug = extractSlug(raw);
     if (labSlug && rawSlug && labSlug === rawSlug) return true;
     if (normalizeUrl(raw) === normalizeUrl(lab.url) || normalizeUrl(raw) === normalizeUrl(lab.path)) return true;
-    if (labSlug && raw.includes(labSlug)) return true;
   }
 
-  // 2. Matching in sessions
+  // 2. sessions — exact slug or normalized URL only
   for (const s of sessions) {
     if (!s) continue;
     const sSlug = extractSlug(s.url || '');
     if (labSlug && sSlug && labSlug === sSlug) return true;
     if (normalizeUrl(s.url) === normalizeUrl(lab.url) || normalizeUrl(s.url) === normalizeUrl(lab.path)) return true;
-
-    // Numeric Day matching ("01" === 1, "02" === 2)
-    const sDayNum = parseInt(s.day, 10);
-    if (!isNaN(labDayNum) && !isNaN(sDayNum) && labDayNum === sDayNum) return true;
-
-    // Title matching
-    if (s.title && s.title.trim().toLowerCase() === labTitleStr) return true;
   }
 
   return false;
@@ -219,16 +223,10 @@ function renderCockpitProgress(userState) {
     }
   });
 
-  let totalHoursSum = 0;
-  (userState.sessions || []).forEach(s => {
-    totalHoursSum += parseFloat(s.hours || 2.5);
-  });
-  if (totalHoursSum === 0 && rawList.length > 0) {
-    totalHoursSum = rawList.length * 2.5;
-  }
-
+  const { count: totalCompletedFromState, totalHours: totalHoursNum } = computeTotals(userState);
+  const totalHours = totalHoursNum.toFixed(1);
+  // keep existing sprintCompletedCount logic; for the cockpit total boxes use:
   const totalCompleted = Math.max(rawList.length, (userState.sessions || []).length, sprintCompletedCount);
-  const totalHours = totalHoursSum.toFixed(1);
   const sprintPct = totalDays > 0 ? ((sprintCompletedCount / totalDays) * 100).toFixed(1) : '0.0';
   const completedMonths = totalDays > 0 && sprintCompletedCount >= totalDays ? 1 : 0;
   const roadmapPct = ((completedMonths / 24) * 100).toFixed(1);
@@ -442,16 +440,10 @@ function renderSyllabusCompletions(userState) {
 
   // Update Syllabus Box 4 (HOURS LOGGED) from userState
   const totalHoursEl = document.getElementById('cockpitTotalHours');
+  const { totalHours: totalHoursNum } = computeTotals(userState);
   if (totalHoursEl) {
-    let totalHoursSum = 0;
-    (userState.sessions || []).forEach(s => {
-      totalHoursSum += parseFloat(s.hours || 2.5);
-    });
-    if (totalHoursSum === 0 && (userState.completedLabs || []).length > 0) {
-      totalHoursSum = (userState.completedLabs || []).length * 2.5;
-    }
-    totalHoursEl.textContent = `${totalHoursSum.toFixed(1)} HOURS`;
-    if (totalHoursSum > 0) totalHoursEl.classList.remove('text-dim');
+    totalHoursEl.textContent = `${totalHoursNum.toFixed(1)} HOURS`;
+    if (totalHoursNum > 0) totalHoursEl.classList.remove('text-dim');
   }
 }
 
@@ -515,18 +507,12 @@ function setupLabCompletionBtn() {
       resetBtn(btn);
     }
 
-    let totalHoursSum = 0;
-    sessions.forEach(s => {
-      totalHoursSum += parseFloat(s.hours || 2.5);
-    });
-    if (totalHoursSum === 0 && rawList.length > 0) {
-      totalHoursSum = rawList.length * 2.5;
-    }
-
+    const { totalHours: totalHoursNum } = computeTotals({ completedLabs: rawList, sessions });
     const newState = {
+      ...userState,
       completedLabs: rawList,
       sessions: sessions,
-      totalHours: totalHoursSum.toFixed(1)
+      totalHours: totalHoursNum.toFixed(1)
     };
 
     saveUserState(newState);
@@ -539,15 +525,9 @@ function renderHistoryPage(userState) {
 
   const rawList = userState.completedLabs || [];
   const sessions = userState.sessions || [];
-  const count = Math.max(rawList.length, sessions.length);
-
-  let totalHoursSum = 0;
-  sessions.forEach(s => { totalHoursSum += parseFloat(s.hours || 2.5); });
-  if (totalHoursSum === 0 && count > 0) {
-    totalHoursSum = count * 2.5;
-  }
-  const totalHours = totalHoursSum.toFixed(1);
-  const avgHours = count > 0 ? (totalHoursSum / count).toFixed(1) : '0.0';
+  const { count, totalHours: totalHoursNum } = computeTotals(userState);
+  const totalHours = totalHoursNum.toFixed(1);
+  const avgHours = count > 0 ? (totalHoursNum / count).toFixed(1) : '0.0';
 
   const totalDays = parseInt(document.querySelector('[data-total-days]')?.dataset?.totalDays || '3', 10);
   const sprintPct = totalDays > 0 ? ((count / totalDays) * 100).toFixed(1) : '0.0';
@@ -640,13 +620,7 @@ function renderRoadmapTelemetry(userState) {
 
   const sessions = userState.sessions || [];
   const rawList = userState.completedLabs || [];
-  const count = Math.max(rawList.length, sessions.length);
-
-  let totalHours = 0;
-  sessions.forEach(s => { totalHours += parseFloat(s.hours || 2.5); });
-  if (totalHours === 0 && count > 0) {
-    totalHours = count * 2.5;
-  }
+  const { count, totalHours } = computeTotals(userState);
 
   const completedMonthsCount = Math.floor(count / 3);
 
@@ -840,7 +814,7 @@ function setupInteractiveChecklists() {
       savedState[idx] = nowChecked;
       try {
         localStorage.setItem(storageKey, JSON.stringify(savedState));
-      } catch (err) {}
+      } catch (err) { }
       updateCompletionGate();
     });
   });
@@ -912,18 +886,18 @@ function setupHudSimulators() {
         nodesHtml = `
           <div class="hud-nodes-grid">
             ${step.nodes.map(n => {
-              const s = n.state;
-              const isRogue = /conflict|severed|damaged|shortage|stress|rogue|faulted|red/i.test(s);
-              const isFlap = /flap|unwound|tightened|warning|resilver|yellow|amber/i.test(s);
-              const isOff = /offline|sub-critical|inert|off/i.test(s);
+          const s = n.state;
+          const isRogue = /conflict|severed|damaged|shortage|stress|rogue|faulted|red/i.test(s);
+          const isFlap = /flap|unwound|tightened|warning|resilver|yellow|amber/i.test(s);
+          const isOff = /offline|sub-critical|inert|off/i.test(s);
 
-              let ledClass = 'hud-led-online';
-              let ledText = n.state.toUpperCase();
-              if (isRogue) { ledClass = 'hud-led-rogue'; }
-              else if (isFlap) { ledClass = 'hud-led-flap'; }
-              else if (isOff) { ledClass = 'hud-led-off'; }
+          let ledClass = 'hud-led-online';
+          let ledText = n.state.toUpperCase();
+          if (isRogue) { ledClass = 'hud-led-rogue'; }
+          else if (isFlap) { ledClass = 'hud-led-flap'; }
+          else if (isOff) { ledClass = 'hud-led-off'; }
 
-              return `
+          return `
                 <div class="hud-node-card ${isRogue ? 'hud-node-conflict' : ''} ${isFlap ? 'hud-node-flapping' : ''}">
                   <div class="hud-node-header">
                     <span class="hud-node-name">${n.name}</span>
@@ -939,7 +913,7 @@ function setupHudSimulators() {
                   </div>
                 </div>
               `;
-            }).join('')}
+        }).join('')}
           </div>
         `;
       }
@@ -1270,9 +1244,15 @@ let activeResultIndex = -1;
 function initSearch() {
   const indexEl = document.getElementById('searchIndexData');
   if (!indexEl) return;
-  const rawData = indexEl.textContent.trim();
-  parseSearchIndex(rawData);
+  try {
+    searchIndex = JSON.parse(indexEl.textContent.trim());
+  } catch (e) {
+    console.warn('Could not parse search index:', e);
+    searchIndex = [];
+  }
 }
+
+// Delete the entire parseSearchIndex function.
 
 function parseSearchIndex(rawData) {
   searchIndex = [];
@@ -1320,7 +1300,7 @@ function executeSearch(query) {
     .slice(0, 25);
 }
 
-window.openSearchModal = function() {
+window.openSearchModal = function () {
   const modal = document.getElementById('searchModal');
   const input = document.getElementById('searchInput');
   if (modal) {
@@ -1334,7 +1314,7 @@ window.openSearchModal = function() {
   }
 };
 
-window.closeSearchModal = function() {
+window.closeSearchModal = function () {
   const modal = document.getElementById('searchModal');
   const input = document.getElementById('searchInput');
   if (input) {
@@ -1527,8 +1507,8 @@ function setupGlobalKeyboardShortcuts() {
     const shortcutsModal = document.getElementById('shortcutsModal');
     const roadmapModal = document.getElementById('roadmapModal');
     if ((searchModal && searchModal.classList.contains('cyber-modal-open')) ||
-        (shortcutsModal && shortcutsModal.classList.contains('cyber-modal-open')) ||
-        (roadmapModal && roadmapModal.classList.contains('cyber-modal-open'))) {
+      (shortcutsModal && shortcutsModal.classList.contains('cyber-modal-open')) ||
+      (roadmapModal && roadmapModal.classList.contains('cyber-modal-open'))) {
       return;
     }
 
@@ -1562,6 +1542,19 @@ function exportStudyHistory() {
   downloadAnchor.remove();
 }
 
+function mergeSessions(existingSessions, importedSessions) {
+  const byUrl = new Map();
+  [...(existingSessions || []), ...(importedSessions || [])].forEach(s => {
+    if (!s || !s.url) return;
+    const key = normalizeUrl(s.url);
+    const prior = byUrl.get(key);
+    if (!prior || (s.completedAt && (!prior.completedAt || s.completedAt > prior.completedAt))) {
+      byUrl.set(key, s);
+    }
+  });
+  return Array.from(byUrl.values());
+}
+
 function importStudyHistory(event) {
   const file = event.target.files && event.target.files[0];
   if (!file) return;
@@ -1571,18 +1564,33 @@ function importStudyHistory(event) {
     try {
       const imported = JSON.parse(e.target.result);
       if (!imported || typeof imported !== 'object') throw new Error("Invalid JSON structure");
-      
+
       const existing = loadUserState() || {};
-      const mergedLabs = Array.from(new Set([...(existing.completedLabs || []), ...(imported.completedLabs || [])]));
-      const mergedHours = Math.max(parseFloat(existing.totalHours || 0), parseFloat(imported.totalHours || 0));
-      
+      const mergedLabs = Array.from(new Set([
+        ...(existing.completedLabs || []),
+        ...(imported.completedLabs || [])
+      ]));
+      const mergedSessions = mergeSessions(existing.sessions, imported.sessions);
+
+      let totalHoursSum = 0;
+      mergedSessions.forEach(s => { totalHoursSum += parseFloat(s.hours || 2.5); });
+      if (totalHoursSum === 0 && mergedLabs.length > 0) {
+        totalHoursSum = mergedLabs.length * 2.5;
+      }
+      const mergedHours = Math.max(
+        totalHoursSum,
+        parseFloat(existing.totalHours || 0),
+        parseFloat(imported.totalHours || 0)
+      );
+
       const mergedState = {
         ...existing,
         ...imported,
         completedLabs: mergedLabs,
-        totalHours: mergedHours
+        sessions: mergedSessions,
+        totalHours: Number(mergedHours).toFixed(1)
       };
-      
+
       saveUserState(mergedState);
       renderHistoryPage(mergedState);
       alert("✓ Study History Successfully Imported and Synchronized!");
@@ -1597,7 +1605,9 @@ function importStudyHistory(event) {
 function registerServiceWorker() {
   if ('serviceWorker' in navigator && (window.location.protocol === 'https:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js')
+      const swPath = typeof getAppUrl === 'function' ? getAppUrl('sw.js') : '/learning-log/sw.js';
+      const swScope = typeof getAppUrl === 'function' ? getAppUrl('') : '/learning-log/';
+      navigator.serviceWorker.register(swPath, { scope: swScope })
         .then((reg) => {
           console.log('[PWA] Service Worker registered with scope:', reg.scope);
         })

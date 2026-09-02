@@ -362,3 +362,13 @@ All colors, typography, and layout spacing are controlled via CSS custom propert
   --max-w:        1600px;
 }
 ```
+## 10. Releasing an asset change (CSS/JS)
+
+Every time `static/css/style.css` or `static/js/app.js` changes:
+
+1. Bump `asset_version` in `config.toml` `[extra]`.
+2. Bump `CACHE_NAME` in `static/sw.js` (increment the `vN` suffix).
+
+Both must change together, or the service worker will keep serving a stale cached copy after redeploy.
+
+**Note:** `static/manifest.json` paths are hardcoded to `/learning-log/`. If the repo is renamed or moved to a custom domain, update those paths manually.
