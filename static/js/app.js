@@ -711,7 +711,7 @@ function setupCodeCopyButtons() {
     const langMatch = (code ? code.className : '').match(/language-([a-zA-Z0-9_\-]+)/);
     let lang = langMatch ? langMatch[1].toUpperCase() : 'CODE';
 
-    const rawText = code ? code.innerText : pre.innerText;
+    const rawText = code ? code.textContent : pre.textContent;
     const isUntypedOrText = lang === 'CODE' || lang === 'ASCII' || lang === 'DIAGRAM' || lang === 'TEXT';
     const isAsciiDiagram = (isUntypedOrText && /[┌└┐┘├┤┬┴┼═║╔╗╚╝╠╣╦╩╬]/.test(rawText)) || lang === 'ASCII' || lang === 'DIAGRAM';
 
@@ -732,7 +732,7 @@ function setupCodeCopyButtons() {
     copyBtn.innerHTML = `<span>COPY</span>`;
 
     copyBtn.addEventListener('click', async () => {
-      const text = code ? code.innerText : pre.innerText;
+      const text = code ? code.textContent : pre.textContent;
       const ok = await copyToClipboard(text);
       if (ok) {
         copyBtn.innerHTML = `<span>COPIED</span>`;
