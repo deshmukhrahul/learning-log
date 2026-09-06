@@ -32,6 +32,9 @@ jobs:
       - name: Build Zola Site
         run: zola build -u https://deshmukhrahul.github.io/learning-log
 
+      - name: Optimize & Minify Production Assets
+        run: python3 scripts/minify_assets.py
+
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:

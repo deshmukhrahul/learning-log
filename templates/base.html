@@ -5,12 +5,29 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#06090e">
+  <meta name="description" content="{% block description %}{% if page and page.description %}{{ page.description }}{% elif section and section.description %}{{ section.description }}{% else %}{{ config.description }}{% endif %}{% endblock %}">
+
+  <!-- Open Graph & Social Cards -->
+  <meta property="og:site_name" content="{{ config.title }}">
+  <meta property="og:title" content="{% block og_title %}{% if page and page.title %}{{ page.title }} · {{ config.title }}{% elif section and section.title %}{{ section.title }} · {{ config.title }}{% else %}{{ config.title }}{% endif %}{% endblock %}">
+  <meta property="og:description" content="{% block og_description %}{% if page and page.description %}{{ page.description }}{% elif section and section.description %}{{ section.description }}{% else %}{{ config.description }}{% endif %}{% endblock %}">
+  <meta property="og:type" content="{% if page %}article{% else %}website{% endif %}">
+  <meta property="og:url" content="{{ current_url | default(value=config.base_url) }}">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="{% block twitter_title %}{% if page and page.title %}{{ page.title }} · {{ config.title }}{% elif section and section.title %}{{ section.title }} · {{ config.title }}{% else %}{{ config.title }}{% endif %}{% endblock %}">
+  <meta name="twitter:description" content="{% block twitter_description %}{% if page and page.description %}{{ page.description }}{% elif section and section.description %}{{ section.description }}{% else %}{{ config.description }}{% endif %}{% endblock %}">
+
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="manifest" href="{{ get_url(path='manifest.json') }}">
   <link rel="apple-touch-icon" href="{{ get_url(path='icons/icon-192.svg') }}">
   <link rel="icon" href="{{ get_url(path='icons/icon-192.svg') }}" type="image/svg+xml">
   <title>{% block title %}{{ config.title }}{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700;800&family=JetBrains+Mono:wght@500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap">
   <link rel="stylesheet" href="{{ get_url(path='css/style.css') }}?v={{ config.extra.asset_version }}">
   <script>
     window.SITE_BASE_URL = "{{ get_url(path='/') }}";
@@ -39,7 +56,7 @@
       <div class="topbar-right">
         {% block topbar_right %}
         <button class="topbar-search-btn" id="btnOpenSearch" onclick="openSearchModal()"
-          title="Search Curriculum (Press / or Ctrl+K)">
+          title="Search Curriculum (Press / or Ctrl+K)" aria-label="Search Curriculum" aria-haspopup="dialog">
           <span class="search-btn-label">SEARCH</span>
           <span class="search-btn-kbd">/</span>
           <span class="search-btn-icon">
@@ -88,7 +105,7 @@
 </script>
 
   <!-- ── HIGH-PERFORMANCE SPOTLIGHT SEARCH MODAL ────────────────────────── -->
-  <div id="searchModal" class="cyber-modal-backdrop" onclick="if(event.target===this)closeSearchModal()">
+  <div id="searchModal" class="cyber-modal-backdrop" role="dialog" aria-modal="true" aria-label="Curriculum Search" onclick="if(event.target===this)closeSearchModal()">
     <div class="cyber-modal-box search-modal-box">
       <div class="search-modal-header">
         <div class="search-input-wrap">
@@ -101,9 +118,9 @@
               stroke-linejoin="round" />
           </svg>
           <input type="text" id="searchInput" class="search-input" placeholder="Search curriculum, labs, topics..."
-            autocomplete="off" spellcheck="false">
+            autocomplete="off" spellcheck="false" aria-label="Search curriculum, labs, topics">
         </div>
-        <button class="cyber-modal-close" onclick="closeSearchModal()" title="Close">
+        <button class="cyber-modal-close" onclick="closeSearchModal()" title="Close" aria-label="Close search">
           <span class="close-text-desktop">✕ ESC</span>
           <span class="close-text-mobile">✕</span>
         </button>
@@ -126,11 +143,11 @@
   </div>
 
   <!-- ── KEYBOARD SHORTCUTS HUD MODAL ────────────────────────────────────── -->
-  <div id="shortcutsModal" class="cyber-modal-backdrop" onclick="if(event.target===this)closeShortcutsModal()">
+  <div id="shortcutsModal" class="cyber-modal-backdrop" role="dialog" aria-modal="true" aria-label="Keyboard Shortcuts" onclick="if(event.target===this)closeShortcutsModal()">
     <div class="cyber-modal-box shortcuts-modal-box">
       <div class="cyber-modal-header">
         <span class="panel-badge">KEYBOARD SHORTCUTS HUD</span>
-        <button class="cyber-modal-close" onclick="closeShortcutsModal()" title="Close (ESC)">✕ ESC</button>
+        <button class="cyber-modal-close" onclick="closeShortcutsModal()" title="Close (ESC)" aria-label="Close shortcuts">✕ ESC</button>
       </div>
       <div class="shortcuts-modal-body">
         <div class="shortcut-row"><span class="shortcut-key"><kbd class="search-kbd">/</kbd> or <kbd
