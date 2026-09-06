@@ -211,8 +211,8 @@ The site features an inline system simulator that converts structured Markdown D
 Ready-made starter templates are provided in the `_templates/` directory so you never have to write boilerplate or frontmatter from scratch:
 
 ### 1. Available Starter Templates:
-* **[`_templates/sysadmin-setup-template.md`](file:///home/rdx/Documents/learning-log-github/_templates/sysadmin-setup-template.md)**: Production-grade 8-part infrastructure runbook for SysAdmins, DevOps, network engineers, and desktop setups.
-* **[`_templates/markdown-kitchen-sink.md`](file:///home/rdx/Documents/learning-log-github/_templates/markdown-kitchen-sink.md)**: Visual cheat-sheet and copy-paste reference for all supported Markdown formatting, tabs, callouts, tables, and SVGs.
+* **[`_templates/sysadmin-setup-template.md`](_templates/sysadmin-setup-template.md)**: Production-grade 8-part infrastructure runbook for SysAdmins, DevOps, network engineers, and desktop setups.
+* **[`_templates/markdown-kitchen-sink.md`](_templates/markdown-kitchen-sink.md)**: Visual cheat-sheet and copy-paste reference for all supported Markdown formatting, tabs, callouts, tables, and SVGs.
 
 ### 2. How to Author a New Runbook:
 ```bash
