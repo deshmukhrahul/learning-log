@@ -1,11 +1,15 @@
-const CACHE_NAME = 'systems-log-v14';
+const CACHE_NAME = 'systems-log-v15';
 const PRECACHE_ASSETS = [
   './',
   'css/style.css',
   'js/app.js',
   'manifest.json',
   'icons/icon-192.svg',
-  'icons/icon-512.svg'
+  'icons/icon-512.svg',
+  'fonts/chakra-petch-600.woff2',
+  'fonts/chakra-petch-700.woff2',
+  'fonts/jetbrains-mono-variable.woff2',
+  'fonts/space-grotesk-variable.woff2'
 ];
 
 // Install: Pre-cache shell assets
