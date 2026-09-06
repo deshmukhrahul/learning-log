@@ -65,13 +65,16 @@ A high-performance, zero-dependency systems engineering curriculum and daily lab
 │   │   └── style.css           # Complete design system & component styles
 │   └── js/
 │       └── app.js              # State machine, HUD parser & search engine
+├── scripts/                    # Build & asset optimization tools
+│   └── minify_assets.py        # Production CSS & JS minifier
 ├── templates/                  # Tera HTML templates
 │   ├── base.html               # Global shell, navigation, search & shortcuts modals
 │   ├── index.html              # Home 4-Box telemetry workbench
 │   ├── section.html            # Monthly syllabus page & lab list
 │   ├── page.html               # Daily lab prose view & completion gate
 │   ├── roadmap.html            # 24-month roadmap with modal view
-│   └── history.html            # Chronological lab ledger & JSON export/import
+│   ├── history.html            # Chronological lab ledger & JSON export/import
+│   └── 404.html                # Custom HUD signal lost error page
 ├── .gitignore                  # Ignores public/ build output and scratch files
 ├── README.md                   # Quickstart summary
 └── GUIDE.md                    # System architecture & user manual
@@ -315,27 +318,58 @@ python3 -m http.server 1111 --directory public
 ```
 
 ### Deploying to GitHub Pages:
-Add `.github/workflows/deploy.yml`:
+The site deploys automatically via `.github/workflows/deploy.yml`:
 ```yaml
 name: Deploy Zola Site to GitHub Pages
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Install Zola
+        run: |
+          curl -sL https://github.com/getzola/zola/releases/download/v0.23.4/zola-v0.23.4-x86_64-unknown-linux-gnu.tar.gz | tar -xz
+          sudo mv zola /usr/local/bin/
+
       - name: Build Zola Site
-        uses: shalzz/zola-deploy-action@v0.19.2
-        env:
-          PAGES_BRANCH: gh-pages
-          BUILD_DIR: .
-          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: zola build -u https://deshmukhrahul.github.io/learning-log
+
+      - name: Optimize & Minify Production Assets
+        run: python3 scripts/minify_assets.py
+
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./public
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
 ```
 
 ---
@@ -362,7 +396,18 @@ All colors, typography, and layout spacing are controlled via CSS custom propert
   --max-w:        1600px;
 }
 ```
-## 10. Releasing an asset change (CSS/JS)
+
+> **Font Performance**: Google Fonts are loaded via parallel `<link rel="preconnect">` and `<link rel="stylesheet">` tags in `templates/base.html` with `display=swap`. Never use `@import` inside `style.css` as it creates a critical 1.9s render-blocking request waterfall on mobile connections.
+
+---
+
+## 10. Production Minification & CI Optimization
+
+Production CSS and JS are automatically optimized by `scripts/minify_assets.py` during the GitHub Actions deployment workflow. This strips whitespace and comments for PageSpeed Insights without modifying your human-readable development source files in `static/`.
+
+---
+
+## 11. Releasing an asset change (CSS/JS)
 
 Every time `static/css/style.css` or `static/js/app.js` changes:
 
